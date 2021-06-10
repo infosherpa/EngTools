@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <title>{% block title %}EngTools{% endblock %}</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container container--flex--wrap--mobile justify-content-start">
+        <a class="navbar-brand" href="/">
+      <img src="{% static 'images/engtools.png' %}" alt="" width="146px" height="48px">
+    </a>
+    </div>
+    <div class="container d-flex justify-content-end">
+        <ul class="nav">
+            <li class="nav-item mx-3">
+                <a href="#" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item mx-3">
+                <a href="#" class="nav-link">Tools</a>
+            </li>
+            <li class="nav-item mx-3">
+                <a href="#" class="nav-link">About</a>
+            </li>
+            <li class="nav-item mx-3 justify-content-end">
+                <a href="#" class="nav-link">About</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="copy-banner">
+    <div class="container-fluid py-2" style="background-color:indigo;">
+        <div class="container container--flex container--flex--wrap--mobile">
+            <h2>
+                <a href="/tun" class="text-decoration-none text-white">2D Tunnel App</a>
+            </h2>
+        </div>
+    </div>
+</div>
+
+
+{% block content %} Content {% endblock %}
+
+<!-- Bootstrap core JavaScript -->
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>

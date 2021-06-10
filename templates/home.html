@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+
+{% block title %} 2D Tunnel File{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-6">
+        <form class="" action="process/" method="post">
+         {% csrf_token %}
+            <label for="frame description" class="form-label">Input Frame Dimensions</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="input">default units = mm</span>
+                <input type="text" class="form-control" placeholder="Inner Frame height" id="IFH" name="IFH">
+                <input type="text" class="form-control" placeholder="Outer Frame height" id="OFH" name="OFH">
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Inner Frame width" id="IFW" name="IFW">
+                <input type="text" class="form-control" placeholder="Outer Frame width" id="OFW" name="OFW">
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Haunch Depth" id="HAD" name="HAD">
+                <input type="text" class="form-control" placeholder="Haunch Width" id="HAW" name="HAW">
+            </div>
+            <button type="submit" class="btn btn-primary">Create Image</button>
+        </form>
+        </div>
+    <div class="col-6">
+        {% if image %}
+            <img src="/static/images/example.png" alt="Frame Image" height="600" width="600">
+        {% endif %}
+        {% if geometry %}
+        <ul>
+            {% for key, value in geometry.items %}
+                <li>{{ key }} : {{ value }}</li>
+            {% endfor %}
+        {% else %}
+        </ul>
+        <h3 class="text-decoration-none">Tunnel Image</h3>
+        {% endif %}
+    </div>
+    </div>
+</div>
+
+{% endblock %}
