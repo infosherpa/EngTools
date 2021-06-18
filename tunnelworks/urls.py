@@ -23,5 +23,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('tun/', include('tunnel_app.urls')),
     path('admin/', admin.site.urls),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('accounts/', include('django.contrib.auth.urls')),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + \
+              static(settings.MEDIA_ROOT, document_roo=settings.MEDIA_ROOT)
 

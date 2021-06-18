@@ -3,6 +3,11 @@ from . import views
 
 app_name = 'tunnel_app'
 urlpatterns = [
-    path('', views.tunnel_home, name='tunnel_home'),
-    path('process/', views.tunnel_frame_input_form, name='dim_form')
+    # ex: /tun/
+    path('', views.tunnel_app_home, name='tunnel_home'),
+    #
+    path('frame', views.tunnel_frame_success, name='results'),
+    path('<int:tunnelframe_id>/frame/', views.auth_tunnel_frame_success, name='auth_results'),
 ]
+
+

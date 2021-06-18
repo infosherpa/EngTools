@@ -1,0 +1,25 @@
+{% extends 'tunnel_app/tun_home.html' %}
+
+{% block form %}
+    <form action="/tun/" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <input type="submit" class="btn btn-primary" value="Submit">
+        <input type="submit" class="btn btn-primary" value="Generate" name="_generate">
+    </form>
+{% endblock %}
+

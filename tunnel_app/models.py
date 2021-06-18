@@ -1,18 +1,31 @@
 from django.db import models
+from django.conf import settings
+
+
+class Project(models.Model):
+    name = models.CharField(max_length=250)
 
 
 class TunnelFrame(models.Model):
     """All dimension inputs in mm"""
-    thickness = models.DecimalField(max_digits=10, decimal_places=4)
-    inner_height = models.DecimalField(max_digits=10, decimal_places=4)
-    outer_height = models.DecimalField(max_digits=10, decimal_places=4)
-    inner_length = models.DecimalField(max_digits=10, decimal_places=4)
-    outer_length = models.DecimalField(max_digits=10, decimal_places=4)
-    haunch_depth = models.DecimalField(max_digits=10, decimal_places=4)
-    haunch_width = models.DecimalField(max_digits=10, decimal_places=4)
-    cracking_mod_compressive = models.DecimalField(max_digits=10, decimal_places=4)
-    cracking_mod_shear = models.DecimalField(max_digits=10, decimal_places=4)
-    cracking_mod_bending = models.DecimalField(max_digits=10, decimal_places=4)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
+    roof_slab_thickness = models.DecimalField(max_digits=10, decimal_places=3)
+    inverse_slab_thickness = models.DecimalField(max_digits=10, decimal_places=3)
+    wall_slab_thickness = models.DecimalField(max_digits=10, decimal_places=3)
+    frame_inner_height = models.DecimalField(max_digits=10, decimal_places=3)
+    frame_outer_height = models.DecimalField(max_digits=10, decimal_places=3)
+    frame_inner_width = models.DecimalField(max_digits=10, decimal_places=3)
+    frame_outer_width = models.DecimalField(max_digits=10, decimal_places=3)
+    haunch_depth = models.DecimalField(max_digits=10, decimal_places=3)
+    haunch_width = models.DecimalField(max_digits=10, decimal_places=3)
+    cracking_mod_compressive = models.DecimalField(max_digits=10, decimal_places=3, null=True)
+    cracking_mod_shear = models.DecimalField(max_digits=10, decimal_places=3, null=True)
+    cracking_mod_bending = models.DecimalField(max_digits=10, decimal_places=3, null=True)
+    frame_description = models.CharField(max_length=250)
+
+    def __str__(self):
+        return self.frame_description
 
 
 class Material(models.Model):
