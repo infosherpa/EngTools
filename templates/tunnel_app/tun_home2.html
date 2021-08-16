@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} 2D Tunnel File{% endblock %}
+
+{% block content %}
+
+<div class="container pb-2">
+    <div class="row mt-4">
+        <div class="col-6">
+            <div class="form-container">
+            {% block form %}
+                {% crispy tunnel_form tunnel_form.helper %}
+                {% if tunnel_form.errors %}
+                        {% for field in tunnel_form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+
+                        {% for error in tunnel_form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+            {% endblock %}
+                 <!--<div class="col-10 progress my-2">
+                    <div class="progress-bar" style="width:2%"></div>
+                 </div>-->
+            </div>
+
+            {% if load_form %}
+            {% block load_form %}
+                {% crispy load_form load_form.helper %}
+                {% if load_form.errors %}
+                        {% for field in load_form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+
+                        {% for error in load_form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+            {% endblock %}
+            {% endif %}
+
+        </div>
+        <div class="col-6">
+            {% if image %}
+                <img src="/static/images/example.png" alt="Frame Image" height="636" width="636">
+            {% else %}
+                <img src="/static/images/sample.png" alt="Frame Image" height="636" width="636">
+                <p>EXAMPLE FRAME RENDERING</p>
+            {% endif %}
+            {% if joints %}
+                <div class="my-custom-scrollbar my-4">
+                    <table class="table table-bordered table-striped caption-top">
+                        <caption>FRAME JOINT DATA</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">JOINT #</th>
+                                <th scope="col">X</th>
+                                <th scope="col">Y</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for key, joint in joints.items %}
+
+                            <tr>
+                                <th scope="row">{{ key }}</th>
+                                <td>{{ joint.0 }}</td>
+                                <td>{{ joint.1 }}</td>
+                            </tr>
+
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <div class="table my-4 my-custom-scrollbar">
+                    <table class="table table-bordered table-striped caption-top">
+                        <caption>FRAME MEMBER DATA</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">MEMBER #</th>
+                                <th scope="col">INITIAL JOINT</th>
+                                <th scope="col">END JOINT</th>
+                                <th scope="col">NAME</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for key, member in members.items %}
+
+                            <tr>
+                                <th scope="row">{{ key }}</th>
+                                <td>{{ member.0 }}</td>
+                                <td>{{ member.1 }}</td>
+                                <td>{{ member.2 }}</td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <!-- <h5>Grid Lines</h5>
+                <ul>
+                    {% for key_grid in grid %}
+                        {{ key_grid.0|upper }}
+                        <li>{{ key_grid.1 }}</li>
+                    {% endfor %}
+                </ul> -->
+
+                {% if loads_list %}
+                <div class="table mb-1">
+                    <table class="table table-bordered table-striped caption-top">
+                        <caption>LOAD CASE DATA</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">LOAD DESCRIPTION</th>
+                                <th scope="col">DIRECTION</th>
+                                <th scope="col">FORCE @ INITIAL JOINT kN/mm</th>
+                                <th scope="col">FORCE @ END JOINT kN/mm</th>
+                                <th scope="col">DROP</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for load in loads_list %}
+
+                            <tr>
+                                <th scope="row">{{ load.load_pattern_description }}</th>
+                                <td>{{ load.load_direction }}</td>
+                                <td>{{ load.start_force }}
+                                    {% if load.force_start_depth >= 0%}
+                                        @ {{ load.force_start_depth }} mm depth
+                                    {% endif %}
+                                </td>
+                                <td>{{ load.end_force }}
+                                    {% if load.force_start_depth >= 0 %}
+                                        @ {{ load.force_end_depth }} mm depth
+                                    {% endif %}
+                                </td>
+                                <td><button type="submit" class="btn bg-transparent py-0 px-0" value="_del_load" onclick="location.href='{% url 'tunnel_app:delete_load' tunnelframe_hash=tunnelframe.hash load_num=load.load_id %}'">Delete Load</button></td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+                </div>
+
+                {% endif %}
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

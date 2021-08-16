@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container pb-2">
     <div class="row mt-4">
         <div class="col-6">
             {% block form %}
@@ -20,16 +20,22 @@
                                 </div>
                             {% endfor %}
                         {% endfor %}
+
                         {% for error in form.non_field_errors %}
                             <div class="alert alert-danger">
                                 <strong>{{ error|escape }}</strong>
                             </div>
                         {% endfor %}
                     {% endif %}
-                    <input type="submit" class="btn btn-primary" value="Generate" name="_generate">
+
+                    <input type="submit" class="btn btn-primary mt-2" value="Generate" name="_generate">
                     {% if image %}
-                        <input type="submit" class="btn btn-primary" value="Excel" name="_excel">
+                        <input type="submit" class="btn btn-primary mt-2" value="Excel" name="_excel">
+                        {% if user.is_authenticated %}
+                            <input type="submit" class="btn btn-primary mt-2" value="Save" name="_save">
+                        {% endif %}
                     {% endif %}
+
                 </form>
             {% endblock %}
         </div>
@@ -37,7 +43,78 @@
             {% if image %}
                 <img src="/static/images/example.png" alt="Frame Image" height="600" width="600">
             {% else %}
-                <h3 class="text-decoration-none">Tunnel Image</h3>
+                <img src="/static/images/sample.png" alt="Frame Image" height="600" width="600">
+                <p>Example Frame Rendering</p>
+            {% endif %}
+            {% if joints %}
+                <h5>frame data</h5>
+
+                <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                    <table class="table table-bordered table-striped mb-0">
+
+                        <thead>
+                            <tr>
+                                <th scope="col">Point</th>
+                                <th scope="col">X</th>
+                                <th scope="col">Y</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for key, joint in joints.items %}
+
+                            <tr>
+                                <th scope="row">{{ key }}</th>
+                                <td>{{ joint.0 }}</td>
+                                <td>{{ joint.1 }}</td>
+                            </tr>
+
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <h5>frame connectivity data</h5>
+
+                <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                    <table class="table table-bordered table-striped mb-0">
+
+                        <thead>
+                            <tr>
+                                <th scope="col">Member</th>
+                                <th scope="col">Point A</th>
+                                <th scope="col">Point B</th>
+                                <th scope="col">Name</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for key, member in members.items %}
+
+                            <tr>
+                                <th scope="row">{{ key }}</th>
+                                <td>{{ member.0 }}</td>
+                                <td>{{ member.1 }}</td>
+                                <td>{{ member.2 }}</td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <h5>Grid Lines</h5>
+                <ul>
+                    {% for key_grid in grid %}
+                        {{ key_grid.0|upper }}
+                        <li>{{ key_grid.1 }}</li>
+                    {% endfor %}
+                </ul>
             {% endif %}
 
         </div>

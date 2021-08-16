@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tunnel_app.apps.TunnelAppConfig',
     'crispy_forms',
+    'project_manager.apps.ProjectManagerConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
@@ -83,7 +85,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
             'read_default_file': '/etc/eng_tun.cnf',
-        }
+        },
+        'NAME': 'tunnel',
+        'USER': 'root',
+        'PASSWORD': '51pr$xZ',
     }
 }
 

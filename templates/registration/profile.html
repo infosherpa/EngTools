@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container container--flex container--flex--wrap--mobile pt-5">
+    <div class="d-flex justify-content-center">
+        <div class="row row-cols-1">
+            <div class="col">
+                <h1>{{user.username}}</h1>
+            </div>
+            <div class="col">
+                {% for frame in latest_frames %}
+                    <h1>{{ frame.frame_description }} --  {{ frame.frame_outer_height }}</h1>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

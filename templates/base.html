@@ -7,41 +7,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profiles.css' %}">
     <title>{% block title %}EngTools{% endblock %}</title>
 </head>
-<body class="d-flex flex-column min-vh-100">
-<div class="container container--flex container--flex--wrap--mobile">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<body class="d-flex flex-column min-vh-100 border-green" style="border-left: 10px solid #5C821A;">
+
+<header class="navbar navbar-expand-lg navbar-light bg-white">
+    <nav class="container">
         <div class="container container--flex--wrap--mobile justify-content-start">
             <a class="navbar-brand" href="/">
                 <img src="{% static 'images/engtools.png' %}" alt="" width="146px" height="48px">
             </a>
         </div>
-        <div class="container d-flex justify-content-end">
+        <div class="container d-flex justify-content-end pe-0">
             <ul class="nav">
                 <li class="nav-item mx-3">
-                    <a href="#" class="nav-link">Home</a>
+                    <a href="#" class="nav-link text-dark">Home</a>
                 </li>
                 <li class="nav-item mx-3">
-                    <a href="#" class="nav-link">Tools</a>
+                    <a href="#" class="nav-link text-dark">Tools</a>
                 </li>
                 <li class="nav-item mx-3">
-                    <a href="#" class="nav-link">About</a>
-                </li>
-                <li class="nav-item mx-3 justify-content-end">
-                    <a href="#" class="nav-link">About</a>
+                    <a href="#" class="nav-link text-dark">About</a>
                 </li>
             </ul>
         </div>
     </nav>
-</div>
+</header>
 
 <div class="copy-banner">
-    <div class="container-fluid py-2" style="background-color:indigo;">
-        <div class="container container--flex container--flex--wrap--mobile">
-            <h2>
-                <a href="/tun" class="text-decoration-none text-white">2D Tunnel App</a>
-            </h2>
+    <div class="container-fluid" style="background-color:#0F1B07; border-bottom: 10px solid #5C821A;">
+        <div class="container" style="height:55px">
+            <div class="row">
+            <div class="col-8">
+                <ul class="list-group list-group-horizontal bg-transparent">
+                    <li class="list-group-item bg-transparent border-0">
+                        <a href="/tun" class="text-decoration-none text-white font-weight-light fs-5">2D TUNNEL APP</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-4 d-flex justify-content-end">
+                {% if user.is_authenticated %}
+                    <ul class="list-group list-group-horizontal">
+                        <li class="list-group-item bg-transparent border-0">
+                            <a class="text-decoration-none text-white fs-5" href="/accounts/profile">PROFILE</a>
+                        </li>
+                        <li class="list-group-item bg-transparent border-0">
+                            <a class="text-decoration-none text-white fs-5" href="/accounts/logout">LOGOUT</a>
+                        </li>
+                    </ul>
+                {% else %}
+                    <ul class="list-group list-group-horizontal">
+                        <li class="list-group-item bg-transparent border-0 me-2">
+                            <a class="text-decoration-none text-white fs-5" href="/accounts/login">LOGIN</a>
+                        </li>
+                    </ul>
+                {% endif %}
+            </div>
+            </div>
         </div>
     </div>
 </div>
@@ -52,25 +75,23 @@
 
 {% block footer %}
 
-<div class="footer mt-auto" style="background-color:indigo;">
-    <div class="container container--flex container--flex--wrap--mobile pt-2">
-        <div class="row">
+<div class="footer mt-auto" style="background-color:#0F1B07">
+    <div class="container container--flex container--flex--wrap--mobile py-2">
+        <div class="row d-flex">
             <div class="col">
-                <h2>Learn More</h2>
-                <ul>
-                    <li>
-                        <a href="#"> About EngTools </a>
+                <ul class="list-group list-group-flush bg-transparent">
+                    <li class="list-group-item bg-transparent">
+                        <a class="text-decoration-none text-white" href="#">About EngTools</a>
                     </li>
                 </ul>
             </div>
             <div class="col">
-                <h2>Get Involved</h2>
-                <ul>
-                    <li>
-                        <a href="#"> Report a Bug</a>
+                <ul class="list-group list-group-flush bg-transparent">
+                    <li class="list-group-item bg-transparent my-0 py-0">
+                        <button class="btn btn-black text-decoration-none text-white" onclick="openForm()"> Report a Bug</button>
                     </li>
-                    <li>
-                        <a href="#">Request a Feature</a>
+                    <li class="list-group-item bg-transparent my-0 py-0">
+                        <button class="btn btn-black text-decoration-none text-white">Request a Feature</button>
                     </li>
                 </ul>
             </div>
@@ -78,10 +99,27 @@
     </div>
 </div>
 
+<div class="form-popup" id="myForm">
+  <form method="POST" class="popup-form-container">
+      {% csrf_token %}
+    <h1>Report a Bug</h1>
+
+    <label for="email"><b>Category</b></label>
+    <input type="text" placeholder="" name="email" required>
+      <label class="form-label" for="textAreaExample1"><b>Message</b></label>
+      <textarea class="form-control mb-2" placeholder="" id="textAreaExample1" required></textarea>
+
+    <button type="button" class="btn btn-success" onclick="submitBugform()">Submit</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+  </form>
+</div>
+
 {% endblock %}
 
 <!-- Bootstrap core JavaScript -->
 <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'javascript/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'javascript/custom_scripts.js' %}"></script>
 </body>
 
 </html>

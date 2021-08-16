@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container container--flex container--flex--wrap--mobile pt-5">
+    <div class="d-flex justify-content-center">
+        <div class="row">
+            <div class="col">
+            {% if form.errors %}
+            <p>Your username and password didn't match. Please try again.</p>
+            {% endif %}
+
+            {% if next %}
+                {% if user.is_authenticated %}
+                <p>Your account doesn't have access to this page. To proceed,
+                please login with an account that has access.</p>
+                {% else %}
+                <p>Please login to see this page.</p>
+                {% endif %}
+            {% endif %}
+
+            <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+                <div class="form-group">
+                    <h2>{{ message }}</h2>
+                    <label for="exampleInputUsername">{{ form.username.label_tag }}</label>
+                    <input type="text" name="username" class="form-control" id="exampleInputUsername" aria-describedby="emailHelp" placeholder="Username">
+                    <small id="emailHelp" class="form-text text-muted"></small>
+                </div>
+                <div class="form-group pb-2">
+                    <label for="exampleInputPassword1">{{ form.password.label_tag }}</label>
+                    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary" value="login">Login</button>
+                <input type="hidden" name="next" value="{{ next }}">
+            </form>
+            <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+            </div>
+        </div>
+    {# Assumes you setup the password_reset view in your URLconf #}
+    </div>
+</div>
+{% endblock %}

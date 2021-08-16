@@ -1,5 +1,4 @@
 asgiref==3.3.4
-cx-Oracle==8.2.1
 Django==3.2.4
 mysql-connector-python==8.0.25
 mysqlclient==2.0.3
