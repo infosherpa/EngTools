@@ -1,0 +1,5 @@
+Column(
+                        Div(
+                            Field('concrete_strength_slabs', css_class='no-spin form-control', aria_describedby="basic-addon3"),
+                            HTML('<span class="input-group-prepend input-group-text" id="basic-addon3">Psi</span>'),
+                            css_class="input-group"),

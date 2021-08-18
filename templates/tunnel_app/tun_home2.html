@@ -11,6 +11,7 @@
             <div class="form-container">
             {% block form %}
                 {% crispy tunnel_form tunnel_form.helper %}
+
                 {% if tunnel_form.errors %}
                         {% for field in tunnel_form %}
                             {% for error in field.errors %}
@@ -56,9 +57,9 @@
         </div>
         <div class="col-6">
             {% if image %}
-                <img src="/static/images/example.png" alt="Frame Image" height="636" width="636">
+                <img src="/{{ image }}" alt="Frame Image" height="{{ img_h }}" width="{{ img_w }}">
             {% else %}
-                <img src="/static/images/sample.png" alt="Frame Image" height="636" width="636">
+                <img src="/static/images/template_frame.png" alt="Frame Image" height="636" width="636">
                 <p>EXAMPLE FRAME RENDERING</p>
             {% endif %}
             {% if joints %}
@@ -135,8 +136,8 @@
                             <tr>
                                 <th scope="col">LOAD DESCRIPTION</th>
                                 <th scope="col">DIRECTION</th>
-                                <th scope="col">FORCE @ INITIAL JOINT kN/mm</th>
-                                <th scope="col">FORCE @ END JOINT kN/mm</th>
+                                <th scope="col">Start Force N/mm</th>
+                                <th scope="col">End Force N/mm</th>
                                 <th scope="col">DROP</th>
                             </tr>
                         </thead>

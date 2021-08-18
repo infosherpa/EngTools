@@ -21,6 +21,7 @@ import mimetypes
 import os
 from django.conf import settings
 import secrets
+from PIL import Image
 
 
 def tunnel_app_home(request):
@@ -277,6 +278,14 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
                 print(loads)
                 tunnelframe.grid_lines()
                 tunnelframe.get_frame_geometry()
+                img = Image.open(f"static/images/{tunnelframe.hash}.png")
+                img_w, img_h = img.size
+                if img_w > img_h:
+                    img_h = img_h / img_w * 636
+                    img_w = 636
+                else:
+                    img_w = img_w / img_h * 636
+                    img_h = 636
 
                 context = {
                     'grid': [tunnelframe.grid_locations_x, tunnelframe.grid_locations_z],
@@ -284,9 +293,11 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
                     'members': tunnelframe.connectivity_frame,
                     'tunnel_form': form,
                     'load_form': load_form,
-                    'image': "static/images/example.png",
+                    'image': f"static/images/{tunnelframe.hash}.png",
                     'loads_list': loads,
-                    'tunnelframe': tunnelframe
+                    'tunnelframe': tunnelframe,
+                    'img_w': img_w,
+                    'img_h': img_h,
                 }
 
                 return render(request, 'tunnel_app/tun_home2.html', context)
@@ -322,15 +333,26 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
                 tunnelframe.grid_lines()
                 tunnelframe.get_frame_geometry()
                 load_form = LoadDefinitionForm()
+                img = Image.open(f"static/images/{tunnelframe.hash}.png")
+                img_w, img_h = img.size
+                if img_w > img_h:
+                    img_h = img_h/img_w*636
+                    img_w = 636
+                else:
+                    img_w = img_w / img_h * 636
+                    img_h = 636
+
                 context = {
                     'grid': [tunnelframe.grid_locations_x, tunnelframe.grid_locations_z],
                     'joints': tunnelframe.joint_coordinates,
                     'members': tunnelframe.connectivity_frame,
                     'tunnel_form': form,
                     'load_form': load_form,
-                    'image': "static/images/example.png",
+                    'image': f"static/images/{tunnelframe.hash}.png",
                     'loads_list': loads,
-                    'tunnelframe': tunnelframe
+                    'tunnelframe': tunnelframe,
+                    'img_w': img_w,
+                    'img_h': img_h,
                 }
                 return render(request, 'tunnel_app/tun_home2.html', context)
 
@@ -345,15 +367,25 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
         tunnelframe.grid_lines()
         tunnelframe.get_frame_geometry()
         cairo_draw_frame(tunnelframe)
+        img = Image.open(f"static/images/{tunnelframe.hash}.png")
+        img_w, img_h = img.size
+        if img_w > img_h:
+            img_h = img_h / img_w * 636
+            img_w = 636
+        else:
+            img_w = img_w / img_h * 636
+            img_h = 636
         context = {
             'grid': [tunnelframe.grid_locations_x, tunnelframe.grid_locations_z],
             'joints': tunnelframe.joint_coordinates,
             'members': tunnelframe.connectivity_frame,
             'tunnel_form': form,
             'load_form': load_form,
-            'image': "static/images/example.png",
+            'image': f"static/images/{tunnelframe.hash}.png",
             'loads_list': loads,
-            'tunnelframe': tunnelframe
+            'tunnelframe': tunnelframe,
+            'img_w': img_w,
+            'img_h': img_h,
         }
         return render(request, 'tunnel_app/tun_home2.html', context)
 

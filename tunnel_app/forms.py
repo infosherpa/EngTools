@@ -3,8 +3,8 @@ from .models import TunnelFrame, LoadDefinition
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Div, MultiField, Field, Row, Column, Button, Hidden, HTML
-from crispy_forms.bootstrap import FormActions, AppendedText
+from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Div, MultiField, Field, Row, Column, Button, Hidden, HTML, BaseInput
+from crispy_forms.bootstrap import FormActions, AppendedText, PrependedAppendedText, PrependedText
 
 
 class TunnelInputForm(forms.ModelForm):
@@ -55,14 +55,21 @@ class TunnelForm(forms.ModelForm):
         self.fields['column_capital_roof_slab_height'].label = "Column Capital Height - RS"
         self.fields['column_capital_roof_slab_width'].label = "Column Capital Width - RS"
         self.fields['column_bays'].label = "Column Divided Bays"
+        self.fields['concrete_strength_walls'].label = "Concrete Strength Walls (PSI)"
+        self.fields['concrete_strength_slabs'].label = "Concrete Strength Slabs (PSI)"
+        self.fields['concrete_strength_columns'].label = "Concrete Strength Columns (PSI)"
+
         self.helper.layout = Layout(
                 Row(
                     Column(
-                        Field('frame_description', css_class='form-control'),
-                        css_class='form-group col-md-5 mb-0'),
-                ),
-                Row(
+                        Div(
+                        HTML("<p class='pt-3 px-2' style='font-family:Rockwell Italic'>1.  Input Frame Dimensions</p>"),
+                        HTML("<p class='px-2' style='font-family:Rockwell Italic'>2.  Generate Frame</p>"),
+                        HTML("<p class='px-2' style='font-family:Rockwell Italic'>3.  Download a SAP-2000 Compatible Excel file</p>"),
+                        css_class="border border-3"),
+                        css_class="col-md-5 mb-0"),
                     Column(
+                        Field('frame_description', css_class='form-control'),
                         Field('dimension_system', css_class='form-select'),
                         css_class='form-group col-md-5 mb-0'),
                 ),
@@ -103,9 +110,11 @@ class TunnelForm(forms.ModelForm):
                         Field('concrete_strength_walls', css_class='no-spin form-control'),
                         css_class='form-group col-md-5 mb-0'),
                     Column(
-                        Field('concrete_strength_slabs', css_class='no-spin form-control'),
-                        css_class='form-group col-md-5 mb-0'),
-                    css_class="form-row mb-0"),
+                        Div(
+                            Field('concrete_strength_slabs', css_class='no-spin form-control', aria_describedby="basic-addon3"),
+                            css_class="form-group"),
+                        css_class='col-md-5 mb-0'),
+                    css_class="form-group row mb-0"),
                 Row(
                     Column(
                         Field('concourse_slab_thickness', css_class='no-spin form-control'),
@@ -116,7 +125,7 @@ class TunnelForm(forms.ModelForm):
                     css_class="form-row mb-0"),
                 Row(
                     Column(
-                        Field('concourse_haunch_depth', step=1, css_class='no-spin form-control'),
+                        Field('concourse_haunch_depth', css_class='no-spin form-control'),
                         css_class='form-group col-md-5 mb-0'),
                     Column(
                         Field('concourse_haunch_width', css_class='no-spin form-control'),
@@ -163,12 +172,14 @@ class TunnelForm(forms.ModelForm):
                         css_class='col-md-5 mb-0'),
                     css_class="row"),
 
+
             FormActions(
                 Submit('_generate', 'Generate', css_class='btn btn-success my-3'),
                 Submit('_excel', 'Excel', css_class='btn btn-success my-3'),
-                Submit('_save', 'Save', css_class='btn btn-success my-3')
+                # Submit('_save', 'Save', css_class='btn btn-success my-3')
             )
         )
+
 
     class Meta:
 
@@ -201,6 +212,8 @@ class TunnelForm(forms.ModelForm):
                 raise ValidationError(_('Invalid value'), code='invalid')
             if self.cleaned_data['frame_inner_width'] > self.cleaned_data['frame_outer_width']:
                 raise ValidationError(_('Invalid value'), code='invalid')
+        if column_bays <1:
+            raise ValidationError(_('Invalid Bays value'), code='invalid')
         if haunch_d and haunch_w:
             if haunch_d <= 0 or haunch_w <= 0:
                 raise ValidationError(_('Invalid value'), code='invalid')
@@ -209,13 +222,20 @@ class TunnelForm(forms.ModelForm):
                 raise ValidationError(_('Input 0 if no Haunch on Concourse level'), code='invalid')
         if column_bays >1:
             print(column_bays)
-            if not column_width:
+            if column_width <= 0:
                 raise ValidationError(_('Invalid value add column width'), code='invalid')
             if column_width is None:
                 raise ValidationError(_('Invalid value add column width'), code='invalid')
         if col_cap_w or col_cap_height:
+            if col_cap_w<=0:
+                raise ValidationError(_('Invalid value: Provide Column Capital Width'), code='invalid')
+            if col_cap_height<=0:
+                raise ValidationError(_('Invalid value: Provide Column Capital Height'), code='invalid')
             if not concourse_slab_thickness or not concourse_slab_vertical_location:
-                raise ValidationError(_('Invalid value Column Capital - CS but no Concourse Slab'), code='invalid')
+                raise ValidationError(_('Invalid value: Column Capital - CS but no Concourse Slab'), code='invalid')
+        if column_width:
+            if column_bays <= 1:
+                raise ValidationError(_('Invalid value: Column Width Defined but no columns - Add Column Divided Bay'), code='invalid')
 
 
 class LoadDefinitionForm(forms.ModelForm):
@@ -260,7 +280,7 @@ class LoadDefinitionForm(forms.ModelForm):
                     Div(
                         Field('force_end_depth', css_class='form-control no-spin'),
                         css_class='col-5'),
-                    css_class="row"),
+                    css_class="row", id="force_depth"),
                      ),
             FormActions(
                 Submit('_load', 'Add Load', css_class='btn btn-success my-3')

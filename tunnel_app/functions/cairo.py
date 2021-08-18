@@ -11,9 +11,9 @@ def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
     HOR_PAD, VERT_PAD = WIDTH-float(tunnel_frame.frame_outer_width)*1.125, HEIGHT - float(
         tunnel_frame.frame_outer_height) * 1.125
     if WIDTH>HEIGHT:
-        PIXEL_SCALE = 1000/WIDTH
+        PIXEL_SCALE = 2000/WIDTH
     else:
-        PIXEL_SCALE = 1000/HEIGHT
+        PIXEL_SCALE = 2000/HEIGHT
 
     context = get_geometry(tunnel_frame)
 
@@ -22,15 +22,18 @@ def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
         ctx = cairo.Context(surface)
 
         ctx.scale(PIXEL_SCALE, PIXEL_SCALE)
-        pat = cairo.LinearGradient(0.0, 0.0, 0.0, 1.0)
-        pat.add_color_stop_rgba(1, 0.7, 0, 0, 0.5)  # First stop, 50% opacity
-        pat.add_color_stop_rgba(0, 0.9, 0.7, 0.2, 1)  # Last stop, 100% opacity
+        # pat = cairo.LinearGradient(0.0, 0.0, 0.0, 1.0)
+        # pat.add_color_stop_rgba(1, 0.7, 0, 0, 0.5)  # First stop, 50% opacity
+        # pat.add_color_stop_rgba(0, 0.9, 0.7, 0.2, 1)  # Last stop, 100% opacity
+
         ctx.rectangle(0, 0, WIDTH, HEIGHT)
-        ctx.set_source(pat)
+        # ctx.set_source(pat)
+
+        ctx.set_source_rgb(255,255,255)
         ctx.fill()
         # Process the vertex locations into cairo co-ordinates
         # Y scale must be reversed due to cairo co-ordinates (0,0 top left of drawing)
-        ctx.set_source_rgb(1, 0, 0)
+        ctx.set_source_rgb(0, 0.596, 0.459)
         ctx.set_line_width(0.06)
 
         matrix = cairo.Matrix(x0=HOR_PAD, yy=-1, y0=HEIGHT-VERT_PAD)
@@ -49,7 +52,7 @@ def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
             write_text(ctx, x+0.01*WIDTH, y-0.01*WIDTH, 0, str(key), matrix, HOR_PAD)
 
         # Draw members
-        ctx.set_source_rgb(0, 1, 0)
+        ctx.set_source_rgb(0, 0, 0)
         ctx.set_line_width(0.002 * WIDTH)
         for memb_key, member in tunnel_frame.connectivity_frame.items():
             for point_key, point in tunnel_frame.joint_coordinates.items():
@@ -202,19 +205,19 @@ def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
 
 
         # Routine for drawing dimension labels
-        ctx.set_source_rgb(0, 0, 0.5)
-
+        ctx.set_source_rgb(0, 0, 0)
+        arrow_length = float(context['label_positions']['frame_height_o']['value']/75)
         for key, dimension_instructions in context['label_positions'].items():
-            arrow_length = float(dimension_instructions['value']/60)
+            # arrow_length = float(dimension_instructions['value']/60)
             if key == 'haunch_depth' or key == 'haunch_width':
-                arrow_length = float(dimension_instructions['value'] / 5)
+                # arrow_length = float(dimension_instructions['value'] / 5)
                 if key == 'haunch_depth':
                     offset = 'right'
                 else:
                     offset = 'down'
             else:
                 offset = None
-            breakpoint_length = float(dimension_instructions['value']/2- dimension_instructions['value']*Decimal(0.10))
+            breakpoint_length = float(dimension_instructions['value']/2- dimension_instructions['value']*(0.10))
             # routine for top / left arrows
             xa, ya = dimension_instructions['vertex_a']
             xb, yb = dimension_instructions['vertex_b']
@@ -250,7 +253,7 @@ def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
                 ctx.stroke()
 
                 write_text(ctx, (xa+xb)/2, (ya+yb)/2, dimension_instructions['rotation'],
-                           str(float(dimension_instructions['value'])), matrix, HOR_PAD, offset)
+                           str(round(dimension_instructions['value'])), matrix, HOR_PAD, offset)
 
             if dimension_instructions['orientation'] == 'horizontal':
                 ctx.move_to(xa, ya)
@@ -277,9 +280,9 @@ def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
                             yb)
                 ctx.stroke()
                 write_text(ctx, (xa + xb) / 2, (ya + yb) / 2, dimension_instructions['rotation'],
-                           str(float(dimension_instructions['value'])), matrix, HOR_PAD, offset)
+                           str(round(dimension_instructions['value'])), matrix, HOR_PAD, offset)
 
-        surface.write_to_png("static/images/example.png")
+        surface.write_to_png(f"static/images/{tunnel_frame.hash}.png")
 
 
 def arrow(ctx, x, y, width, height, a, b, rotate=None):
@@ -305,8 +308,10 @@ def write_text(ctx, x, y, rotation, text, matrix, HOR_PAD, offset=None):
     fascent, fdescent, fheight, fxadvance, fyadvance = ctx.font_extents()
     if offset == "down":
         y = y*0.95
+        x = x*1.02
     if offset == 'right':
-        x = x*1.10
+        x = x*1.18
+        y = y*0.98
     if rotation != 0:
         nx = -width/2.0
         ny = fheight/2

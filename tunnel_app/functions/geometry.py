@@ -168,7 +168,7 @@ def get_geometry(TunnelFrame):
             'orientation': 'vertical',
             'vertex_a': (Decimal('0')-TunnelFrame.frame_outer_width* Decimal('0.06'), 0),
             'vertex_b': (Decimal('0') - TunnelFrame.frame_outer_width * Decimal('0.06'), TunnelFrame.frame_outer_height),
-            'value': TunnelFrame.frame_outer_height,
+            'value': round(TunnelFrame.frame_outer_height),
             'rotation': -90
         },
         'frame_height_i': {
@@ -176,14 +176,14 @@ def get_geometry(TunnelFrame):
             'vertex_b': ((Decimal('0') - TunnelFrame.frame_outer_width * Decimal('0.03')),
                           TunnelFrame.frame_inner_height + TunnelFrame.inverse_slab_thickness),
             'vertex_a': (Decimal('0') - TunnelFrame.frame_outer_width * Decimal('0.03'), TunnelFrame.inverse_slab_thickness),
-            'value': TunnelFrame.frame_inner_height,
+            'value': round(TunnelFrame.frame_inner_height),
             'rotation': -90
         },
         'frame_width_o': {
             'orientation': 'horizontal',
             'vertex_a': (0, Decimal('0') - TunnelFrame.frame_outer_height* Decimal('0.06')),
             'vertex_b': (TunnelFrame.frame_outer_width, Decimal('0')- TunnelFrame.frame_outer_height * Decimal('0.06')),
-            'value': TunnelFrame.frame_outer_width,
+            'value': round(TunnelFrame.frame_outer_width),
             'rotation': 0
         },
         'frame_width_i': {
@@ -193,7 +193,7 @@ def get_geometry(TunnelFrame):
             'vertex_b': (TunnelFrame.frame_outer_width -TunnelFrame.wall_slab_thickness,
                          Decimal('0') - TunnelFrame.frame_outer_height * Decimal(
                 '0.03')),
-            'value': TunnelFrame.frame_inner_width,
+            'value': round(TunnelFrame.frame_inner_width),
             'rotation': 0
         },
         'haunch_depth': {
@@ -202,7 +202,7 @@ def get_geometry(TunnelFrame):
                          TunnelFrame.inverse_slab_thickness+TunnelFrame.frame_inner_height),
             'vertex_a': (TunnelFrame.wall_slab_thickness+ TunnelFrame.haunch_width+ TunnelFrame.haunch_width*Decimal(0.05),
                          TunnelFrame.inverse_slab_thickness + TunnelFrame.frame_inner_height-TunnelFrame.haunch_depth),
-            'value': TunnelFrame.haunch_depth,
+            'value': round(TunnelFrame.haunch_depth),
             'rotation': 0
         },
         'haunch_width': {
@@ -211,7 +211,7 @@ def get_geometry(TunnelFrame):
                          TunnelFrame.inverse_slab_thickness+TunnelFrame.frame_inner_height - TunnelFrame.haunch_depth*Decimal(1.05)),
             'vertex_b': (TunnelFrame.wall_slab_thickness + TunnelFrame.haunch_width,
                          TunnelFrame.inverse_slab_thickness + TunnelFrame.frame_inner_height - TunnelFrame.haunch_depth*Decimal(1.05)),
-            'value': TunnelFrame.haunch_width,
+            'value': round(TunnelFrame.haunch_width),
             'rotation': 0
         },
     }
@@ -292,7 +292,7 @@ def get_grid_lines(tfi):
 
     if tfi.concourse_slab_thickness:
         if tfi.concourse_haunch_depth:
-            grid_locations_z.append(tfi.concourse_slab_vertical_location-tfi.concourse_haunch_depth)
+            grid_locations_z.append(tfi.concourse_slab_vertical_location-tfi.concourse_slab_thickness/2-tfi.concourse_haunch_depth)
             grid_locations_z.append(tfi.concourse_slab_vertical_location - tfi.concourse_slab_thickness/2)
             grid_locations_z.append(tfi.concourse_slab_vertical_location)
             grid_locations_z.append(tfi.concourse_slab_vertical_location + tfi.concourse_slab_thickness / 2)
@@ -326,15 +326,29 @@ def get_grid_lines(tfi):
 def get_member_name(a, b, tfi):
     member_name = ""
     if a[0] == b[0]:
-        # member is on the y axis.
-        # y value yields naming convention based on location
+        # member is on the vertical axis.
+        # vertical value yields naming convention based on location
         if b[0] <= tfi.wall_slab_thickness:
-            if b[1] <= tfi.inverse_slab_thickness:
-                member_name = f"WS{math.floor(tfi.inverse_slab_thickness)}_S"
-            elif b[1] <= (tfi.frame_outer_height-tfi.roof_slab_thickness):
-                member_name = f"WS{math.floor(tfi.inverse_slab_thickness)}"
+            if a[1] > tfi.frame_outer_height-tfi.roof_slab_thickness:
+                member_name=f"WS{math.floor(tfi.wall_slab_thickness+tfi.haunch_width/2)}_S"
+            elif a[1] == tfi.frame_outer_height-tfi.roof_slab_thickness and b[1] == tfi.frame_outer_height-tfi.roof_slab_thickness-tfi.haunch_depth:
+                member_name=f"WS{math.floor(tfi.wall_slab_thickness+tfi.haunch_width/2)}"
+            elif b[1] < tfi.inverse_slab_thickness:
+                member_name = f"WS{math.floor(tfi.wall_slab_thickness)}_S"
             else:
-                member_name = f"WS{math.floor(tfi.inverse_slab_thickness)}_S"
+                if tfi.concourse_slab_thickness:
+                    if tfi.concourse_slab_vertical_location-tfi.concourse_slab_thickness/2 < a[1] <= tfi.concourse_slab_vertical_location+tfi.concourse_slab_thickness/2:
+                        member_name = f"WS{math.floor(tfi.wall_slab_thickness+tfi.concourse_haunch_width/2)}_S"
+                    elif tfi.concourse_haunch_depth:
+                        if a[1]==tfi.concourse_slab_vertical_location-tfi.concourse_slab_thickness/2 and b[1]==tfi.concourse_slab_vertical_location-tfi.concourse_slab_thickness/2-tfi.concourse_haunch_depth:
+                            member_name = f"WS{math.floor(tfi.wall_slab_thickness+tfi.concourse_haunch_width/2)}"
+                        else:
+                            member_name = f"WS{math.floor(tfi.wall_slab_thickness)}"
+                    else:
+                        member_name = f"WS{math.floor(tfi.wall_slab_thickness)}"
+                else:
+                    member_name = f"WS{math.floor(tfi.wall_slab_thickness)}"
+
         elif b[0] < tfi.frame_outer_width-tfi.wall_slab_thickness:
             #
             if b[1] <= tfi.inverse_slab_thickness:
@@ -343,13 +357,30 @@ def get_member_name(a, b, tfi):
                 member_name = f"COL{math.floor(tfi.column_width)}"
             else:
                 member_name = f"COL{math.floor(tfi.column_width)}_S"
+
         elif b[0] > tfi.frame_outer_width-tfi.wall_slab_thickness:
-            if b[1] <= tfi.inverse_slab_thickness:
-                member_name = f"WS{math.floor(tfi.roof_slab_thickness)}_S"
-            elif b[1] <= tfi.frame_outer_height-tfi.roof_slab_thickness:
-                member_name = f"WS{math.floor(tfi.roof_slab_thickness)}"
+            if a[1] > tfi.frame_outer_height - tfi.roof_slab_thickness:
+                member_name = f"WS{math.floor(tfi.wall_slab_thickness + tfi.haunch_width / 2)}_S"
+            elif a[1] == tfi.frame_outer_height - tfi.roof_slab_thickness and b[
+                1] == tfi.frame_outer_height - tfi.roof_slab_thickness - tfi.haunch_depth:
+                member_name = f"WS{math.floor(tfi.wall_slab_thickness + tfi.haunch_width / 2)}"
+            elif b[1] < tfi.inverse_slab_thickness:
+                member_name = f"WS{math.floor(tfi.wall_slab_thickness)}_S"
             else:
-                member_name = f"WS{math.floor(tfi.roof_slab_thickness)}_S"
+                if tfi.concourse_slab_thickness:
+                    if tfi.concourse_slab_vertical_location - tfi.concourse_slab_thickness / 2 < a[
+                        1] <= tfi.concourse_slab_vertical_location + tfi.concourse_slab_thickness / 2:
+                        member_name = f"WS{math.floor(tfi.wall_slab_thickness + tfi.concourse_haunch_width / 2)}_S"
+                    elif tfi.concourse_haunch_depth:
+                        if a[1] == tfi.concourse_slab_vertical_location - tfi.concourse_slab_thickness / 2 and b[
+                            1] == tfi.concourse_slab_vertical_location - tfi.concourse_slab_thickness / 2 - tfi.concourse_haunch_depth:
+                            member_name = f"WS{math.floor(tfi.wall_slab_thickness + tfi.concourse_haunch_width / 2)}"
+                        else:
+                            member_name = f"WS{math.floor(tfi.wall_slab_thickness)}"
+                    else:
+                        member_name = f"WS{math.floor(tfi.wall_slab_thickness)}"
+                else:
+                    member_name = f"WS{math.floor(tfi.wall_slab_thickness)}"
     elif a[1] == b[1]:
         # member is on the x axis
         if b[1] <= tfi.inverse_slab_thickness:
@@ -360,16 +391,37 @@ def get_member_name(a, b, tfi):
 
         elif b[1] == tfi.concourse_slab_vertical_location:
             if b[0] <= tfi.wall_slab_thickness or a[0] >= (tfi.frame_outer_width - tfi.wall_slab_thickness):
-                member_name = f"CS{math.floor(tfi.concourse_slab_thickness)}_S"
+                if tfi.concourse_haunch_depth:
+                    member_name = f"CS{math.floor(tfi.concourse_slab_thickness+tfi.concourse_haunch_depth/2)}_S"
+                else:
+                    member_name = f"CS{math.floor(tfi.concourse_slab_thickness)}_S"
             else:
-                member_name = f"CS{math.floor(tfi.concourse_slab_thickness)}"
+                if tfi.concourse_haunch_depth:
+                    if b[0]==tfi.wall_slab_thickness+tfi.concourse_haunch_width or a[0]==tfi.frame_outer_width-tfi.wall_slab_thickness-tfi.concourse_haunch_width:
+                        member_name = f"CS{math.floor(tfi.concourse_slab_thickness+tfi.concourse_haunch_depth/2)}"
+                    else:
+                        member_name = f"CS{math.floor(tfi.concourse_slab_thickness)}"
+                else:
+                    member_name = f"CS{math.floor(tfi.concourse_slab_thickness)}"
 
         elif b[1] > tfi.frame_outer_height-tfi.roof_slab_thickness:
             if b[0] <= tfi.wall_slab_thickness:
-                member_name = f"RS{math.floor(tfi.roof_slab_thickness)}_S"
+                if tfi.haunch_depth:
+                    member_name = f"RS{math.floor(tfi.roof_slab_thickness+tfi.haunch_depth/2)}_S"
+                else:
+                    member_name = f"RS{math.floor(tfi.roof_slab_thickness)}_S"
             elif b[0]>tfi.frame_outer_width-tfi.wall_slab_thickness:
-                member_name = f"RS{math.floor(tfi.roof_slab_thickness)}_S"
+                if tfi.haunch_depth:
+                    member_name = f"RS{math.floor(tfi.roof_slab_thickness + tfi.haunch_depth / 2)}_S"
+                else:
+                    member_name = f"RS{math.floor(tfi.roof_slab_thickness)}_S"
             else:
-                member_name = f"RS{math.floor(tfi.roof_slab_thickness)}"
+                if tfi.haunch_width:
+                    if b[0] == tfi.wall_slab_thickness + tfi.haunch_width or a[0] == tfi.frame_outer_width - tfi.wall_slab_thickness - tfi.haunch_width:
+                        member_name = f"RS{math.floor(tfi.roof_slab_thickness+ tfi.haunch_depth / 2)}"
+                    else:
+                        member_name = f"RS{math.floor(tfi.roof_slab_thickness)}"
+                else:
+                    member_name = f"RS{math.floor(tfi.roof_slab_thickness)}"
 
     return member_name

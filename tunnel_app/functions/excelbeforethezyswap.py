@@ -361,11 +361,11 @@ def create_workbook(tunnel_frame, auth=False):
     for grid in tunnel_frame.grid_locations_x:
         ws13.append(["GLOBAL", "X", chr(i), float(grid), "Primary", "Gray8Dark", "Yes", "End", "Yes", 1250])
         i += 1
-    ws13.append(["GLOBAL", "Y", 1, 0, "Primary", "Gray8Dark", "Yes", "End"])
+    ws13.append(["GLOBAL", "Y", 1, 0, "Primary", "Gray8Dark", "Yes", "Start"])
 
     i = 1
     for grid in tunnel_frame.grid_locations_z:
-        ws13.append(["GLOBAL", "Z", f"Z{i}", float(grid), "Primary", "Gray8Dark", "Yes", "Start"])
+        ws13.append(["GLOBAL", "Z", f"Z{i}", float(grid), "Primary", "Gray8Dark", "Yes", "End"])
         i+=1
 
     # Joint Co-Ordinates

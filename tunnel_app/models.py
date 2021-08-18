@@ -13,9 +13,7 @@ class TunnelFrame(models.Model):
         ("Metric_Standard", "N mm C"),
     )
     plane_choice = [
-        ("xy", "x-y"),
         ("xz", "x-z"),
-        ("yz", "y-z"),
     ]
 
     column_depth_choices = [

@@ -144,19 +144,30 @@ function dirFunc(){
     if(document.getElementById('id_load_pattern_description').value=='LL_RS'){
         document.getElementById('id_load_direction').value="Gravity";
         document.getElementById('id_load_location').value="RS";
+        document.getElementById("id_force_start_depth").value = "";
+        document.getElementById("id_force_end_depth").value = "";
+        document.getElementById("id_force_start_depth").readOnly = true;
+        document.getElementById("id_force_end_depth").readOnly = true;
     }
     else if(document.getElementById('id_load_pattern_description').value=='LL_CS'){
-        console.log('LL_CS')
         document.getElementById('id_load_direction').value="Gravity";
         document.getElementById('id_load_location').value="CS";
+        document.getElementById("id_force_start_depth").value = "";
+        document.getElementById("id_force_end_depth").value = "";
+        document.getElementById("id_force_start_depth").readOnly = true;
+        document.getElementById("id_force_end_depth").readOnly = true;
     }
     else if(document.getElementById('id_load_pattern_description').value=='H_L'){
         document.getElementById('id_load_direction').value="X";
         document.getElementById('id_load_location').value="LW";
+        document.getElementById("id_force_start_depth").readOnly = false;
+        document.getElementById("id_force_end_depth").readOnly = false;
     }
     else if(document.getElementById('id_load_pattern_description').value=='R_L'){
         document.getElementById('id_load_direction').value="X";
         document.getElementById('id_load_location').value="RW";
+        document.getElementById("id_force_start_depth").readOnly = false;
+        document.getElementById("id_force_end_depth").readOnly = false;
     }
 }
 
@@ -201,4 +212,44 @@ function submitBugform(e){
                 });
                 closeForm()
                 return false;
+}
+
+function submitFeaturesform(e){
+    console.log('js activated');
+    console.log(e)
+    e = e || window.event;
+    e.preventDefault();
+                var form = '.form-popup';
+                console.log(form)
+                $.ajax({
+                    headers: {
+                    'X-CSRFToken': csrftoken,
+                    },
+                    data: $(form).serialize(), // get the form data
+                    type: "POST", // GET or POST
+                    url: '/tun/bugreport/',
+                    // on success
+                    success: function (response) {
+                        response => { return response.json();}
+                        alert("Bug Report Sent");
+                    },
+                    // on error
+                    error: function (response) {
+                        // alert the error if any error occured
+                        response => { return response.json();}
+                        alert(response.responseJSON.errors);
+                        console.log(response.responseJSON.errors)
+                    }
+                });
+                closeForm()
+                return false;
+}
+
+
+function openFeatForm() {
+  document.getElementById("RequestForm").style.display = "block";
+}
+
+function closeFeatForm() {
+  document.getElementById("RequestForm").style.display = "none";
 }
