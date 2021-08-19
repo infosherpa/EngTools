@@ -17,7 +17,7 @@ def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
 
     context = get_geometry(tunnel_frame)
 
-    with cairo.SVGSurface("example.svg", WIDTH*PIXEL_SCALE, HEIGHT*PIXEL_SCALE) as surface:
+    with cairo.SVGSurface("static/images/example.svg", WIDTH*PIXEL_SCALE, HEIGHT*PIXEL_SCALE) as surface:
 
         ctx = cairo.Context(surface)
 
@@ -203,6 +203,17 @@ def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
                     ctx.stroke()
                     i += 1
 
+                    if tunnel_frame.column_capital_roof_slab_height:
+                        ctx.move_to(left_wall, tunnel_frame.frame_outer_height-tunnel_frame.roof_slab_thickness-tunnel_frame.column_capital_roof_slab_height)
+                        ctx.line_to(left_wall-tunnel_frame.column_capital_roof_slab_width,tunnel_frame.frame_outer_height-tunnel_frame.roof_slab_thickness)
+                        ctx.stroke()
+
+                        ctx.move_to(right_wall,
+                                    tunnel_frame.frame_outer_height-tunnel_frame.roof_slab_thickness-tunnel_frame.column_capital_roof_slab_height)
+                        ctx.line_to(right_wall + tunnel_frame.column_capital_roof_slab_width,
+                                    tunnel_frame.frame_outer_height-tunnel_frame.roof_slab_thickness)
+                        ctx.stroke()
+
 
         # Routine for drawing dimension labels
         ctx.set_source_rgb(0, 0, 0)
@@ -282,7 +293,7 @@ def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
                 write_text(ctx, (xa + xb) / 2, (ya + yb) / 2, dimension_instructions['rotation'],
                            str(round(dimension_instructions['value'])), matrix, HOR_PAD, offset)
 
-        surface.write_to_png(f"static/images/{tunnel_frame.hash}.png")
+        surface.write_to_png(f"static/images/frames/{tunnel_frame.hash}.png")
 
 
 def arrow(ctx, x, y, width, height, a, b, rotate=None):

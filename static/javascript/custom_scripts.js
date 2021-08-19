@@ -177,6 +177,7 @@ function bugPrompt(){
 }
 
 function openForm() {
+  document.getElementById("RequestForm").style.display = "none";
   document.getElementById("myForm").style.display = "block";
 }
 
@@ -247,6 +248,7 @@ function submitFeaturesform(e){
 
 
 function openFeatForm() {
+  document.getElementById("myForm").style.display = "none";
   document.getElementById("RequestForm").style.display = "block";
 }
 

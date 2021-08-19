@@ -78,97 +78,97 @@ class TunnelForm(forms.ModelForm):
                         Field('plane', css_class='form-select'),
                         css_class='form-group col-md-5 mb-0'),
                     Column(
-                        Field('roof_slab_thickness', css_class='no-spin form-control'),
+                        Field('roof_slab_thickness', css_class='no-spin form-control', min=0),
                         css_class="col-md-5 mb-0"),
                 ),
                 Row(
                     Column(
-                        Field('frame_inner_height', css_class='no-spin form-control'),
+                        Field('frame_inner_height', css_class='no-spin form-control', min=0),
                         css_class='form-group col-md-5 mb-0'),
                     Column(
-                        Field('frame_outer_height', css_class='no-spin form-control'),
+                        Field('frame_outer_height', css_class='no-spin form-control', min=0),
                         css_class='form-group col-md-5 mb-0'),
                     css_class="row form-row"),
                 Row(
                     Column(
-                        Field('frame_inner_width', css_class='no-spin form-control'),
+                        Field('frame_inner_width', css_class='no-spin form-control', min=0),
                         css_class='form-group col-md-5 mb-0'),
                     Column(
-                        Field('frame_outer_width', css_class='no-spin form-control'),
-                        css_class='form-group col-md-5 mb-0'),
-                    css_class="form-row mb-0"),
-                Row(
-                    Column(
-                        Field('haunch_depth', css_class='no-spin form-control'),
-                        css_class='form-group col-md-5 mb-0'),
-                    Column(
-                        Field('haunch_width', css_class='no-spin form-control'),
+                        Field('frame_outer_width', css_class='no-spin form-control', min=0),
                         css_class='form-group col-md-5 mb-0'),
                     css_class="form-row mb-0"),
                 Row(
                     Column(
-                        Field('concrete_strength_walls', css_class='no-spin form-control'),
+                        Field('haunch_depth', css_class='no-spin form-control', min=0),
+                        css_class='form-group col-md-5 mb-0'),
+                    Column(
+                        Field('haunch_width', css_class='no-spin form-control', min=0),
+                        css_class='form-group col-md-5 mb-0'),
+                    css_class="form-row mb-0"),
+                Row(
+                    Column(
+                        Field('concrete_strength_walls', css_class='no-spin form-control', min=0),
                         css_class='form-group col-md-5 mb-0'),
                     Column(
                         Div(
-                            Field('concrete_strength_slabs', css_class='no-spin form-control', aria_describedby="basic-addon3"),
+                            Field('concrete_strength_slabs', css_class='no-spin form-control', aria_describedby="basic-addon3", min=0),
                             css_class="form-group"),
                         css_class='col-md-5 mb-0'),
                     css_class="form-group row mb-0"),
                 Row(
                     Column(
-                        Field('concourse_slab_thickness', css_class='no-spin form-control'),
+                        Field('concourse_slab_thickness', css_class='no-spin form-control', min=0),
                         css_class='form-group col-md-5 mb-0'),
                     Column(
-                        Field('concourse_slab_vertical_location', css_class='no-spin form-control'),
-                        css_class='form-group col-md-5 mb-0'),
-                    css_class="form-row mb-0"),
-                Row(
-                    Column(
-                        Field('concourse_haunch_depth', css_class='no-spin form-control'),
-                        css_class='form-group col-md-5 mb-0'),
-                    Column(
-                        Field('concourse_haunch_width', css_class='no-spin form-control'),
+                        Field('concourse_slab_vertical_location', css_class='no-spin form-control', min=0),
                         css_class='form-group col-md-5 mb-0'),
                     css_class="form-row mb-0"),
                 Row(
                     Column(
-                        Field('column_bays', css_class='no-spin form-control'),
+                        Field('concourse_haunch_depth', css_class='no-spin form-control', min=0),
                         css_class='form-group col-md-5 mb-0'),
                     Column(
-                        Field('column_width', css_class='no-spin form-control'),
+                        Field('concourse_haunch_width', css_class='no-spin form-control', min=0),
                         css_class='form-group col-md-5 mb-0'),
                     css_class="form-row mb-0"),
                 Row(
                     Column(
-                        Field('column_capital_height', css_class='no-spin form-control'),
+                        Field('column_bays', css_class='no-spin form-control', min=1),
+                        css_class='form-group col-md-5 mb-0'),
+                    Column(
+                        Field('column_width', css_class='no-spin form-control', min=0),
+                        css_class='form-group col-md-5 mb-0'),
+                    css_class="form-row mb-0"),
+                Row(
+                    Column(
+                        Field('column_capital_height', css_class='no-spin form-control', min=0),
                            css_class='form-group col-md-5 mb-0'),
                     Column(
-                        Field('column_capital_width', css_class='no-spin form-control'),
+                        Field('column_capital_width', css_class='no-spin form-control', min=0),
                               css_class='form-group form-outline col-md-5 mb-0'),
                     css_class='form-row mb-0'),
                 Row(
                     Column(
-                        Field('column_capital_roof_slab_height', css_class='no-spin form-control'),
+                        Field('column_capital_roof_slab_height', css_class='no-spin form-control', min=0),
                         css_class='form-group form-outline col-md-5 mb-0'),
                     Column(
-                        Field('column_capital_roof_slab_width', css_class='no-spin form-control'),
+                        Field('column_capital_roof_slab_width', css_class='no-spin form-control', min=0),
                         css_class='form-group form-outline col-md-5 mb-0'),
                     css_class="form-row mb-0"),
                 Row(
                     Column(
-                        Field('column_stiffness_modifier', css_class='no-spin form-control'),
+                        Field('column_stiffness_modifier', css_class='no-spin form-control', min=0),
                         css_class='col-md-5 mb-0'),
                     Column(
-                        Field('concrete_strength_columns', css_class='no-spin form-control'),
+                        Field('concrete_strength_columns', css_class='no-spin form-control', min=0),
                         css_class='col-md-5 mb-0'),
                     css_class="row"),
                 Row(
                     Column(
-                        Field('slab_stiffness_modifier', css_class='no-spin form-control'),
+                        Field('slab_stiffness_modifier', css_class='no-spin form-control', min=0),
                         css_class='col-md-5 mb-0'),
                     Column(
-                        Field('wall_stiffness_modifier', css_class='no-spin form-control'),
+                        Field('wall_stiffness_modifier', css_class='no-spin form-control', min=0),
                         css_class='col-md-5 mb-0'),
                     css_class="row"),
 
@@ -200,6 +200,8 @@ class TunnelForm(forms.ModelForm):
         inner_l, outer_l = self.cleaned_data['frame_inner_width'], self.cleaned_data['frame_outer_width']
         haunch_d, haunch_w = self.cleaned_data['haunch_depth'], self.cleaned_data['haunch_width']
         col_cap_w, col_cap_height = self.cleaned_data['column_capital_width'], self.cleaned_data['column_capital_height']
+        col_cap_rsw, col_cap_rsh = self.cleaned_data['column_capital_roof_slab_width'], self.cleaned_data[
+            'column_capital_roof_slab_height']
         concourse_slab_thickness = self.cleaned_data['concourse_slab_thickness']
         column_bays = self.cleaned_data['column_bays']
         column_width = self.cleaned_data['column_width']
@@ -222,9 +224,9 @@ class TunnelForm(forms.ModelForm):
                 raise ValidationError(_('Input 0 if no Haunch on Concourse level'), code='invalid')
         if column_bays >1:
             print(column_bays)
-            if column_width <= 0:
-                raise ValidationError(_('Invalid value add column width'), code='invalid')
             if column_width is None:
+                raise ValidationError(_('Invalid value add column width'), code='invalid')
+            if column_width <= 0:
                 raise ValidationError(_('Invalid value add column width'), code='invalid')
         if col_cap_w or col_cap_height:
             if col_cap_w<=0:
@@ -233,6 +235,9 @@ class TunnelForm(forms.ModelForm):
                 raise ValidationError(_('Invalid value: Provide Column Capital Height'), code='invalid')
             if not concourse_slab_thickness or not concourse_slab_vertical_location:
                 raise ValidationError(_('Invalid value: Column Capital - CS but no Concourse Slab'), code='invalid')
+        if col_cap_rsw or col_cap_rsh:
+            if not column_width or column_bays<2:
+                raise ValidationError(_('Invalid value - add column data'), code='invalid')
         if column_width:
             if column_bays <= 1:
                 raise ValidationError(_('Invalid value: Column Width Defined but no columns - Add Column Divided Bay'), code='invalid')

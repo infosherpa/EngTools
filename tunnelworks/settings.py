@@ -131,9 +131,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 # STATIC_ROOT = STATIC_DIR
-STATICFILES_DIRS = [
-    STATIC_DIR
-]
+STATICFILES_DIRS = [STATIC_DIR]
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -143,4 +141,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+if not DEBUG:
+    STATIC_ROOT = '/files/'
 

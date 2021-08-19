@@ -24,61 +24,6 @@ import secrets
 from PIL import Image
 
 
-def tunnel_app_home(request):
-    """Homepage for 2D Tunnel App & Tunnel Frame Information Form"""
-
-    if request.method == "POST":
-        form = TunnelInputForm(request.POST)
-        if form.is_valid():
-            
-            tunnelframe = form.save(commit=False)
-            tunnelframe.wall_slab_thickness = (form.cleaned_data['frame_outer_width'] -
-                                               form.cleaned_data['frame_inner_width'])/2
-            tunnelframe.inverse_slab_thickness = (
-                    form.cleaned_data['frame_outer_height']-form.cleaned_data['frame_inner_height']
-                    - form.cleaned_data['roof_slab_thickness']
-            )
-            if '_generate' in request.POST:
-
-                tunnelframe.grid_lines()
-                tunnelframe.get_frame_geometry()
-
-                cairo_draw_frame(tunnelframe)
-                context = {
-                    'grid': [('x grid lines', tunnelframe.grid_locations_x), ('Z grid lines', tunnelframe.grid_locations_z)],
-                    'joints': tunnelframe.joint_coordinates,
-                    'members': tunnelframe.connectivity_frame,
-                    'form': form,
-                    'image': "static/images/example.png",
-                }
-                return render(request, 'tunnel_app/tun_home.html', context)
-
-            if '_excel' in request.POST:
-                tunnelframe.grid_lines()
-                tunnelframe.get_frame_geometry()
-                return create_workbook(tunnelframe)
-
-            if '_save' in request.POST:
-                tunnelframe.creator = request.user
-                tunnelframe.save()
-
-                # After saving the tunnelframe object we must save all associated defined loads for
-                # our tunnelframe
-
-            else:
-                pass
-        else:
-            print('form invalid')
-        return render(request, 'tunnel_app/tun_home.html', {'form': form})
-
-    else:
-        data = {
-
-        }
-        form = TunnelInputForm()
-        return render(request, 'tunnel_app/tun_home.html', {'form': form})
-
-
 class UsersFramesListView(ListView):
     template_name = ""
     paginate_by = 10
@@ -91,60 +36,9 @@ class UsersFramesListView(ListView):
         return TunnelFrame.objects.filter(creator=self.request.user)
 
 
-def tunnel_frame_success(request, tunnelframe):
-    """Renders a Tunnelframe based on the ID"""
-
-    tunnel_frame = tunnelframe
-
-    dimensions = {
-        'inner_frame_h': tunnel_frame.frame_inner_height,
-        'outer_frame_h': tunnel_frame.frame_outer_height,
-        'inner_frame_w': tunnel_frame.frame_inner_width,
-        'haunch_depth': tunnel_frame.haunch_depth,
-        'haunch_height': tunnel_frame.haunch_width,
-        'side_thickness': tunnel_frame.wall_slab_thickness,
-        'top_thickness': tunnel_frame.roof_slab_thickness,
-    }
-    vertexes = get_geometry(tunnel_frame)
-    image = None
-
-    WIDTH, HEIGHT = 3, 3
-    PIXEL_SCALE = 100
-    with cairo.SVGSurface("example.svg", WIDTH*PIXEL_SCALE, HEIGHT*PIXEL_SCALE) as surface:
-
-        ctx = cairo.Context(surface)
-
-        ctx.scale(PIXEL_SCALE, PIXEL_SCALE)
-        pat = cairo.LinearGradient(0.0, 0.0, 0.0, 1.0)
-        pat.add_color_stop_rgba(1, 0.7, 0, 0, 0.5)  # First stop, 50% opacity
-        pat.add_color_stop_rgba(0, 0.9, 0.7, 0.2, 1)  # Last stop, 100% opacity
-        ctx.rectangle(0, 0, WIDTH, HEIGHT)
-        ctx.set_source(pat)
-        ctx.fill()
-
-        ctx.move_to(1, 1)
-        ctx.line_to(2.5, 1.5)
-
-        ctx.set_source_rgb(1, 0, 0)
-        ctx.set_line_width(0.06)
-        ctx.stroke()
-
-        surface.write_to_png("static/images/example.png")
-
-    form = TunnelInputForm()
-
-    context = {
-        'form': form,
-        'geometry': dimensions,
-        'image': "static/images/example.png",
-        'vertexes': vertexes,
-    }
-
-    return render(request, 'tunnel_app/tun_home.html', context)
-
-
 def download_file(request):
     # fill these variables with real values
+    path = None
     file_path = os.path.join(settings.MEDIA_ROOT, path)
     if os.path.exists(file_path):
         with open(file_path, 'rb') as fh:
@@ -252,6 +146,9 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
         'column_stiffness_modifier': tunnelframe.column_stiffness_modifier,
         'column_capital_roof_slab_height': tunnelframe.column_capital_roof_slab_height,
         'column_capital_roof_slab_width': tunnelframe.column_capital_roof_slab_width,
+        'concrete_strength_columns': tunnelframe.concrete_strength_columns,
+        'concrete_strength_slabs': tunnelframe.concrete_strength_slabs,
+        'concrete_strength_walls': tunnelframe.concrete_strength_walls,
     }
 
     form = TunnelForm(initial=form_data)
@@ -278,7 +175,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
                 print(loads)
                 tunnelframe.grid_lines()
                 tunnelframe.get_frame_geometry()
-                img = Image.open(f"static/images/{tunnelframe.hash}.png")
+                img = Image.open(f"static/images/frames/{tunnelframe.hash}.png")
                 img_w, img_h = img.size
                 if img_w > img_h:
                     img_h = img_h / img_w * 636
@@ -293,7 +190,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
                     'members': tunnelframe.connectivity_frame,
                     'tunnel_form': form,
                     'load_form': load_form,
-                    'image': f"static/images/{tunnelframe.hash}.png",
+                    'image': f"static/images/frames/{tunnelframe.hash}.png",
                     'loads_list': loads,
                     'tunnelframe': tunnelframe,
                     'img_w': img_w,
@@ -333,7 +230,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
                 tunnelframe.grid_lines()
                 tunnelframe.get_frame_geometry()
                 load_form = LoadDefinitionForm()
-                img = Image.open(f"static/images/{tunnelframe.hash}.png")
+                img = Image.open(f"static/images/frames/{tunnelframe.hash}.png")
                 img_w, img_h = img.size
                 if img_w > img_h:
                     img_h = img_h/img_w*636
@@ -348,7 +245,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
                     'members': tunnelframe.connectivity_frame,
                     'tunnel_form': form,
                     'load_form': load_form,
-                    'image': f"static/images/{tunnelframe.hash}.png",
+                    'image': f"static/images/frames/{tunnelframe.hash}.png",
                     'loads_list': loads,
                     'tunnelframe': tunnelframe,
                     'img_w': img_w,
@@ -367,7 +264,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
         tunnelframe.grid_lines()
         tunnelframe.get_frame_geometry()
         cairo_draw_frame(tunnelframe)
-        img = Image.open(f"static/images/{tunnelframe.hash}.png")
+        img = Image.open(f"static/images/frames/{tunnelframe.hash}.png")
         img_w, img_h = img.size
         if img_w > img_h:
             img_h = img_h / img_w * 636
@@ -381,7 +278,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
             'members': tunnelframe.connectivity_frame,
             'tunnel_form': form,
             'load_form': load_form,
-            'image': f"static/images/{tunnelframe.hash}.png",
+            'image': f"static/images/frames/{tunnelframe.hash}.png",
             'loads_list': loads,
             'tunnelframe': tunnelframe,
             'img_w': img_w,
