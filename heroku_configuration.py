@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import re
-import shutils
+import shutil
 
 temp = open('temp', 'wb')
 with open('tunnelworks/settings.py', 'r+') as f:
