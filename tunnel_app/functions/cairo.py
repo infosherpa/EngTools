@@ -17,7 +17,7 @@ def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
 
     context = get_geometry(tunnel_frame)
 
-    with cairo.SVGSurface("static/images/example.svg", WIDTH*PIXEL_SCALE, HEIGHT*PIXEL_SCALE) as surface:
+    with cairo.SVGSurface("mediafiles/images/example.svg", WIDTH*PIXEL_SCALE, HEIGHT*PIXEL_SCALE) as surface:
 
         ctx = cairo.Context(surface)
 
