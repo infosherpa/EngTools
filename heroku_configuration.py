@@ -3,7 +3,7 @@
 import re
 import shutil
 
-temp = open('temp', 'wb')
+temp = open('temp', 'w')
 with open('tunnelworks/settings.py', 'r+') as f:
 
   for line in f:
