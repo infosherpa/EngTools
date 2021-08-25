@@ -10,4 +10,3 @@ sqlparse==0.4.1
 django-crispy-forms==1.12.0
 openpyxl==3.0.7
 pillow==8.3.1
-
