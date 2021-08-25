@@ -60,7 +60,7 @@
             {% if image %}
                 <img src="{% static image %}" alt="Frame Image" height="{{ img_h }}" width="{{ img_w }}">
             {% else %}
-                <img src="{% static images/template_frame.png %}" alt="Frame Image" height="636" width="636">
+                <img src="{% static 'images/template_frame.png' %}" alt="Frame Image" height="636" width="636">
                 <p>EXAMPLE FRAME RENDERING</p>
             {% endif %}
             {% if joints %}
