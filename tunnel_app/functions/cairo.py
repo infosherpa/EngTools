@@ -293,7 +293,7 @@ def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
                 write_text(ctx, (xa + xb) / 2, (ya + yb) / 2, dimension_instructions['rotation'],
                            str(round(dimension_instructions['value'])), matrix, HOR_PAD, offset)
 
-        surface.write_to_png(f"staticfiles/images/frames/{tunnel_frame.hash}.png")
+        surface.write_to_png(f"mediafiles/images/frames/{tunnel_frame.hash}.png")
 
 
 def arrow(ctx, x, y, width, height, a, b, rotate=None):

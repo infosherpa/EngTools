@@ -170,11 +170,10 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
                 load_definition.parent_frame_description = tunnelframe.frame_description
                 load_definition.save()
 
-
                 print(loads)
                 tunnelframe.grid_lines()
                 tunnelframe.get_frame_geometry()
-                img = Image.open(f"staticfiles/images/frames/{tunnelframe.hash}.png")
+                img = Image.open(f"mediafiles/images/frames/{tunnelframe.hash}.png")
                 img_w, img_h = img.size
                 if img_w > img_h:
                     img_h = img_h / img_w * 636
@@ -229,7 +228,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
                 tunnelframe.grid_lines()
                 tunnelframe.get_frame_geometry()
                 load_form = LoadDefinitionForm()
-                img = Image.open(f"staticfiles/images/frames/{tunnelframe.hash}.png")
+                img = Image.open(f"mediafiles/images/frames/{tunnelframe.hash}.png")
                 img_w, img_h = img.size
                 if img_w > img_h:
                     img_h = img_h/img_w*636
@@ -263,7 +262,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
         tunnelframe.grid_lines()
         tunnelframe.get_frame_geometry()
         cairo_draw_frame(tunnelframe)
-        img = Image.open(f"staticfiles/images/frames/{tunnelframe.hash}.png")
+        img = Image.open(f"mediafiles/images/frames/{tunnelframe.hash}.png")
         img_w, img_h = img.size
         if img_w > img_h:
             img_h = img_h / img_w * 636
