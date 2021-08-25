@@ -6,7 +6,7 @@ name: CI_heroku
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches: [ heroku ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -19,6 +19,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          ref: heroku
 
       # Runs a single command using the runners shell
       - name: setup python
@@ -41,4 +43,4 @@ jobs:
         run: |
           git add .
           git commit -m "Heroku TunnelFrame configuration"
-          git push origin heroku
+          git push
