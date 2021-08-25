@@ -361,11 +361,11 @@ def create_workbook(tunnel_frame, auth=False):
     for grid in tunnel_frame.grid_locations_x:
         ws13.append(["GLOBAL", "X", chr(i), float(grid), "Primary", "Gray8Dark", "Yes", "End", "Yes", 1250])
         i += 1
-    ws13.append(["GLOBAL", "Y", 1, 0, "Primary", "Gray8Dark", "Yes", "End"])
+    ws13.append(["GLOBAL", "Y", 1, 0, "Primary", "Gray8Dark", "Yes", "End", "Yes", 1250])
 
     i = 1
     for grid in tunnel_frame.grid_locations_z:
-        ws13.append(["GLOBAL", "Z", f"Z{i}", float(grid), "Primary", "Gray8Dark", "Yes", "Start"])
+        ws13.append(["GLOBAL", "Z", f"Z{i}", float(grid), "Primary", "Gray8Dark", "Yes", "Start", "Yes", 1250])
         i+=1
 
     # Joint Co-Ordinates
@@ -468,6 +468,16 @@ def create_workbook(tunnel_frame, auth=False):
     ws20.append(['Case', 'LoadType', 'LoadName', 'LoadSF'])
     ws20.append(['Text', 'Text', 'Text', 'Unitless'])
 
+    #####
+
+    """ws21 = wb.create_sheet(title="Joint Restraint Assignments")
+    ws21['A1'] = "TABLE: Joint Restraint Assignments"
+    ws21.append(['Joint', 'U1', 'U2', 'U3', 'R1', 'R2', 'R3'])
+    ws21.append(['Text', 'Yes/No', 'Yes/No', 'Yes/No', 'Yes/No', 'Yes/No', 'Yes/No'])
+    for joint, values in tunnel_frame.joint_coordinates.items():
+        if values[1] == 0:
+            ws21.append([joint, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'])"""
+
     loads_list = []
     for load in loads:
         if load.load_pattern_description in loads_list:
@@ -485,4 +495,5 @@ def create_workbook(tunnel_frame, auth=False):
     target = os.path.join(settings.STATIC_DIR, "XLXS")
     wb.save(target+f"/{dest_filename}")
     wb_location = os.path.join(target, dest_filename)
+
     return wb_location

@@ -16,7 +16,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Quick-start development settings - unsuitable for production
@@ -83,9 +83,6 @@ WSGI_APPLICATION = 'tunnelworks.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-            'read_default_file': '/etc/eng_tun.cnf',
-        },
         'NAME': 'tunnel',
         'USER': 'root',
         'PASSWORD': '51pr$xZ',
@@ -130,8 +127,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = STATIC_DIR
-STATICFILES_DIRS = [STATIC_DIR]
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -141,7 +140,3 @@ CRISPY_TEMPLATE_PACK = 'bootstrap'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-if not DEBUG:
-    STATIC_ROOT = '/files/'
-
