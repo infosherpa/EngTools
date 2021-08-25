@@ -120,8 +120,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
     """Renders a page with the Tunnelframe object"""
 
     tunnelframe = get_object_or_404(TunnelFrame, hash=tunnelframe_hash)
-    print(tunnelframe_hash)
-    print(tunnelframe.id)
+
     loads = LoadDefinition.objects.filter(parent_frame=tunnelframe.id)
 
     form_data = {

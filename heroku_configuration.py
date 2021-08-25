@@ -31,7 +31,7 @@ database_sett = "DATABASES['default'] = dj_database_url.config(conn_max_age=600,
 temp.write(database_sett)
 temp.write('\n')
 
-django_heroku = "django_heroku.settings(locals())"+'\n'
+django_heroku = "django_heroku.settings(locals(), logging=False)"+'\n'
 temp.write(django_heroku)
 temp.write('\n')
 
