@@ -12,9 +12,6 @@ with open('tunnelworks/settings.py', 'r+') as f:
 
     if line.startswith("    'django.middleware.security.SecurityMiddleware',"):
       line = line + "    'whitenoise.middleware.WhiteNoiseMiddleware'," + '\n'
-
-    if line.startswith("INSTALLED_APPS = ["):
-      line = line + "    'whitenoise.runserver_nostatic'," + '\n'
     
     line = re.sub('DEBUG = True', 'DEBUG = False', line)
     line = re.sub(r'ALLOWED_HOSTS = \[]', r"ALLOWED_HOSTS = ['127.0.0.1', 'engtools.herokuapp.com']", line)
