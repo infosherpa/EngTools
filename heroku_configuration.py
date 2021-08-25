@@ -5,10 +5,7 @@ import shutil
 
 temp = open('temp', 'wb')
 with open('tunnelworks/settings.py', 'r+') as f:
-  re.sub('DEBUG = True', 'DEBUG = False', f, count=1)
-  re.sub("ALLOWED_HOSTS = ['127.0.0.1', 'engtools.herokuapp.com']", 'ALLOWED_HOSTS = []', f, count=1)
-  re.sub('django.db.backends.postgresql_psycopg2', 'django.db.backends.mysql', f, count=1)
-  
+
   for line in f:
     if line.startswith('import'):
       line = line + 'import django_heroku'+'\n' + 'import dj_database_url'+'\n'
@@ -18,6 +15,11 @@ with open('tunnelworks/settings.py', 'r+') as f:
 
     if line.startswith("INSTALLED_APPS = ["):
       line = line + "    'whitenoise.runserver_nostatic'," + '\n'
+    
+    re.sub('DEBUG = False', 'DEBUG = True', line)
+    re.sub('ALLOWED_HOSTS = []', "ALLOWED_HOSTS = ['127.0.0.1', 'engtools.herokuapp.com']", line)
+    re.sub('django.db.backends.mysql', 'django.db.backends.postgresql_psycopg2', line)
+      
     temp.write(line)
   f.close()
 
@@ -34,7 +36,7 @@ django_heroku = "django_heroku.settings(locals())"+'\n'
 temp.write(django_heroku)
 
 temp.close()
-shutils.move('temp', 'tunnelworks/settings.py')
+shutil.move('temp', 'tunnelworks/settings.py')
 
 
 with open('requirements,txt', 'a') as f:
