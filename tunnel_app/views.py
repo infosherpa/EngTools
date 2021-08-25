@@ -190,7 +190,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
                     'members': tunnelframe.connectivity_frame,
                     'tunnel_form': form,
                     'load_form': load_form,
-                    'image': f"static/images/frames/{tunnelframe.hash}.png",
+                    'image': f"images/frames/{tunnelframe.hash}.png",
                     'loads_list': loads,
                     'tunnelframe': tunnelframe,
                     'img_w': img_w,
@@ -230,7 +230,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
                 tunnelframe.grid_lines()
                 tunnelframe.get_frame_geometry()
                 load_form = LoadDefinitionForm()
-                img = Image.open(f"static/images/frames/{tunnelframe.hash}.png")
+                img = Image.open(f"images/frames/{tunnelframe.hash}.png")
                 img_w, img_h = img.size
                 if img_w > img_h:
                     img_h = img_h/img_w*636
@@ -245,7 +245,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
                     'members': tunnelframe.connectivity_frame,
                     'tunnel_form': form,
                     'load_form': load_form,
-                    'image': f"static/images/frames/{tunnelframe.hash}.png",
+                    'image': f"images/frames/{tunnelframe.hash}.png",
                     'loads_list': loads,
                     'tunnelframe': tunnelframe,
                     'img_w': img_w,
@@ -278,7 +278,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
             'members': tunnelframe.connectivity_frame,
             'tunnel_form': form,
             'load_form': load_form,
-            'image': f"static/images/frames/{tunnelframe.hash}.png",
+            'image': f"images/frames/{tunnelframe.hash}.png",
             'loads_list': loads,
             'tunnelframe': tunnelframe,
             'img_w': img_w,

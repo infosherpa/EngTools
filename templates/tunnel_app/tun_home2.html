@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block title %} 2D Tunnel File{% endblock %}
 
@@ -57,7 +58,7 @@
         </div>
         <div class="col-6">
             {% if image %}
-                <img src="/{{ image }}" alt="Frame Image" height="{{ img_h }}" width="{{ img_w }}">
+                <img src="{% static image %}" alt="Frame Image" height="{{ img_h }}" width="{{ img_w }}">
             {% else %}
                 <img src="/static/images/template_frame.png" alt="Frame Image" height="636" width="636">
                 <p>EXAMPLE FRAME RENDERING</p>
