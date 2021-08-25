@@ -17,8 +17,8 @@ with open('tunnelworks/settings.py', 'r+') as f:
       line = line + "    'whitenoise.runserver_nostatic'," + '\n'
     
     re.sub('DEBUG = False', 'DEBUG = True', line)
-    re.sub('ALLOWED_HOSTS = []', "ALLOWED_HOSTS = ['127.0.0.1', 'engtools.herokuapp.com']", line)
-    re.sub('django.db.backends.mysql', 'django.db.backends.postgresql_psycopg2', line)
+    re.sub('ALLOWED_HOSTS = \[]', "ALLOWED_HOSTS = \['127\.0\.0\.1', 'engtools\.herokuapp\.com'\]", line)
+    re.sub('django\.db\.backends\.mysql', 'django\.db\.backends\.postgresql_psycopg2', line)
       
     temp.write(line)
   f.close()
