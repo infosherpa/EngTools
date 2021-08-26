@@ -255,3 +255,94 @@ function openFeatForm() {
 function closeFeatForm() {
   document.getElementById("RequestForm").style.display = "none";
 }
+
+function formAdv() {
+  if (document.getElementById("conc_col").style.display == "none") {
+    document.getElementById("basic_frame").style.display = "none";
+    document.getElementById("conc_col").style.display = "block";
+    document.getElementById("formcontrolbut").value="Back To Essential Geometry";
+  }
+  else {
+   document.getElementById("basic_frame").style.display = "block";
+   document.getElementById("conc_col").style.display = "none";
+   document.getElementById("formcontrolbut").value="Concourse/Column Inputs";
+  }
+}
+
+function formtoBasic() {
+  document.getElementById("basic_frame").style.display = "none";
+  document.getElementById("conc_col").style.display = "block";
+}
+
+function concourseControl() {
+    document.getElementById("id_concourse_slab_vertical_location").readOnly = false;
+    document.getElementById("id_concourse_haunch_depth").readOnly = false;
+    document.getElementById("id_concourse_haunch_width").readOnly = false;
+    document.getElementById("id_concourse_haunch_depth").value = 0;
+    document.getElementById("id_concourse_haunch_width").value = 0;
+    if (document.getElementById("id_column_bays").value > 1) {
+      document.getElementById("id_column_capital_height").readOnly = false;
+      document.getElementById("id_column_capital_width").readOnly = false;
+    }
+    if (document.getElementById("id_concourse_slab_thickness").value == 0 || null) {
+      document.getElementById("id_column_capital_height").value = null;
+      document.getElementById("id_column_capital_width").value = null;
+      document.getElementById("id_concourse_slab_vertical_location").value = null;
+      document.getElementById("id_column_capital_height").value = null;
+      document.getElementById("id_column_capital_width").value = null;
+
+      document.getElementById("id_concourse_haunch_depth").readOnly = true;
+      document.getElementById("id_concourse_haunch_width").readOnly = true;
+      document.getElementById("id_concourse_slab_vertical_location").readOnly = true;
+      document.getElementById("id_column_capital_height").readOnly = true;
+      document.getElementById("id_column_capital_width").readOnly = true;
+    }
+}
+
+function columnControl() {
+    document.getElementById("id_column_width").readOnly = false;
+    document.getElementById("id_column_capital_roof_slab_width").readOnly = false;
+    document.getElementById("id_column_capital_roof_slab_height").readOnly = false;
+    if (document.getElementById("id_concourse_slab_vertical_location").readOnly == false) {
+      document.getElementById("id_column_capital_height").readOnly = false;
+      document.getElementById("id_column_capital_width").readOnly = false;
+    }
+    if (document.getElementById("id_column_bays").value == 1) {
+      document.getElementById("id_column_capital_roof_slab_width").value = null;
+      document.getElementById("id_column_capital_roof_slab_height").value = null;
+      document.getElementById("id_column_width").value = null;
+      document.getElementById("id_column_capital_height").value = null;
+      document.getElementById("id_column_capital_width").value = null;
+
+      document.getElementById("id_column_capital_roof_slab_width").readOnly = true;
+      document.getElementById("id_column_capital_roof_slab_height").readOnly = true;
+      document.getElementById("id_column_capital_height").readOnly = true;
+      document.getElementById("id_column_capital_width").readOnly = true;
+      document.getElementById("id_column_width").readOnly = true;
+    }
+}
+
+
+window.addEventListener("load", formLoad)
+
+function formLoad() {
+    console.log('load event')
+    if (document.getElementById("id_column_bays").value > 1) {
+      document.getElementById("id_column_capital_roof_slab_width").readOnly = false;
+      document.getElementById("id_column_capital_roof_slab_height").readOnly = false;
+      document.getElementById("id_column_width").readOnly = false;
+      if (document.getElementById("id_concourse_slab_thickness").value > 0) {
+        document.getElementById("id_column_capital_height").readOnly = false;
+        document.getElementById("id_column_capital_width").readOnly = false;
+      }
+    }
+    if (document.getElementById("id_concourse_slab_thickness").value > 0) {
+      document.getElementById("id_concourse_slab_vertical_location").readOnly = false;
+      document.getElementById("id_concourse_haunch_depth").readOnly = false;
+      document.getElementById("id_concourse_haunch_width").readOnly = false;
+      if (document.getElementById("id_column_bays").value > 1) {
+        document.getElementById("id_column_capital_height").readOnly = false;
+        document.getElementById("id_column_capital_width").readOnly = false;
+      }
+    }
+}

@@ -2,6 +2,9 @@ import cairo
 import math
 from .geometry import get_geometry
 from decimal import *
+from django.core.files import File
+from ..models import TunnelFrame
+from django.conf import settings
 
 
 def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
@@ -17,7 +20,9 @@ def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
 
     context = get_geometry(tunnel_frame)
 
-    with cairo.SVGSurface("mediafiles/images/example.svg", WIDTH*PIXEL_SCALE, HEIGHT*PIXEL_SCALE) as surface:
+    with open(f"media/images/frames/{tunnel_frame.hash}.png", 'wb') as f:
+
+        surface = cairo.SVGSurface(None, WIDTH*PIXEL_SCALE, HEIGHT*PIXEL_SCALE)
 
         ctx = cairo.Context(surface)
 
@@ -221,6 +226,8 @@ def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
         for key, dimension_instructions in context['label_positions'].items():
             # arrow_length = float(dimension_instructions['value']/60)
             if key == 'haunch_depth' or key == 'haunch_width':
+                if dimension_instructions['value'] == 0:
+                    continue
                 # arrow_length = float(dimension_instructions['value'] / 5)
                 if key == 'haunch_depth':
                     offset = 'right'
@@ -293,7 +300,18 @@ def cairo_draw_frame(tunnel_frame, custom_column_spacing=None):
                 write_text(ctx, (xa + xb) / 2, (ya + yb) / 2, dimension_instructions['rotation'],
                            str(round(dimension_instructions['value'])), matrix, HOR_PAD, offset)
 
-        surface.write_to_png(f"mediafiles/images/frames/{tunnel_frame.hash}.png")
+        myfile = File(f)
+        surface.write_to_png(myfile)
+        myfile.close()
+
+        with open(f'media/images/frames/{tunnel_frame.hash}.png', 'rb') as myfile:
+            tunnel_frame.frame_image.save(f'images/frames/{tunnel_frame.hash}.png', myfile)
+            tunnel_frame.save()
+            myfile.close()
+
+        print(tunnel_frame.frame_image)
+        print(tunnel_frame.frame_image.url)
+        f.close()
 
 
 def arrow(ctx, x, y, width, height, a, b, rotate=None):

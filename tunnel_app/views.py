@@ -173,7 +173,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
                 print(loads)
                 tunnelframe.grid_lines()
                 tunnelframe.get_frame_geometry()
-                img = Image.open(f"mediafiles/images/frames/{tunnelframe.hash}.png")
+                img = Image.open(f"media/images/frames/{tunnelframe.hash}.png")
                 img_w, img_h = img.size
                 if img_w > img_h:
                     img_h = img_h / img_w * 636
@@ -223,12 +223,14 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
 
             else:
                 # raise flag for form error
+                form = TunnelForm(request.POST)
+                return render(request, 'tunnel_app/tun_home2.html', {'tunnel_form': form})
                 print('form_error')
                 tunnelframe = get_object_or_404(TunnelFrame, hash=tunnelframe_hash)
                 tunnelframe.grid_lines()
                 tunnelframe.get_frame_geometry()
                 load_form = LoadDefinitionForm()
-                img = Image.open(f"mediafiles/images/frames/{tunnelframe.hash}.png")
+                img = Image.open(f"media/images/frames/{tunnelframe.hash}.png")
                 img_w, img_h = img.size
                 if img_w > img_h:
                     img_h = img_h/img_w*636
@@ -262,7 +264,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
         tunnelframe.grid_lines()
         tunnelframe.get_frame_geometry()
         cairo_draw_frame(tunnelframe)
-        img = Image.open(f"mediafiles/images/frames/{tunnelframe.hash}.png")
+        img = Image.open(f"media/images/frames/{tunnelframe.hash}.png")
         img_w, img_h = img.size
         if img_w > img_h:
             img_h = img_h / img_w * 636

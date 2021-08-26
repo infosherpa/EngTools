@@ -32,8 +32,8 @@ class TunnelFrame(models.Model):
     frame_outer_height = models.DecimalField(max_digits=10, decimal_places=2)
     frame_inner_width = models.DecimalField(max_digits=10, decimal_places=2)
     frame_outer_width = models.DecimalField(max_digits=10, decimal_places=2)
-    haunch_depth = models.DecimalField(max_digits=10, decimal_places=2)
-    haunch_width = models.DecimalField(max_digits=10, decimal_places=2)
+    haunch_depth = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    haunch_width = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     cracking_mod_compressive = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     cracking_mod_shear = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     cracking_mod_bending = models.DecimalField(max_digits=10, decimal_places=2, null=True)
@@ -64,6 +64,8 @@ class TunnelFrame(models.Model):
     concrete_strength_walls = models.IntegerField(default=5000)
     concrete_strength_slabs = models.IntegerField(default=5000)
     concrete_strength_columns = models.IntegerField(default=5000)
+
+    frame_image = models.ImageField(null=True)
 
     def __str__(self):
         return self.frame_description

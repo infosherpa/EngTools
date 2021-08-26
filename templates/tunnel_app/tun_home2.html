@@ -8,8 +8,8 @@
 
 <div class="container pb-2">
     <div class="row mt-4">
-        <div class="col-6">
-            <div class="form-container">
+        <div class="col-6 pt-4">
+            <div class="form-container my-3">
             {% block form %}
                 {% crispy tunnel_form tunnel_form.helper %}
 
@@ -34,6 +34,7 @@
                  </div>-->
             </div>
 
+
             {% if load_form %}
             {% block load_form %}
                 {% crispy load_form load_form.helper %}
@@ -56,15 +57,14 @@
             {% endif %}
 
         </div>
-        <div class="col-6">
+        <div class="col-6 mb-4">
             {% if image %}
-                <img src="{{ MEDIA_URL }}{{image}}" alt="Frame Image" height="{{ img_h }}" width="{{ img_w }}">
+                <img src="{{tunnelframe.frame_image.url}}" alt="Frame Image" height="{{ img_h }}" width="{{ img_w }}">
             {% else %}
                 <img src="{% static 'images/template_frame.png' %}" alt="Frame Image" height="636" width="636">
-                <p>EXAMPLE FRAME RENDERING</p>
             {% endif %}
             {% if joints %}
-                <div class="my-custom-scrollbar my-4">
+                <div class="my-custom-scrollbar my-2">
                     <table class="table table-bordered table-striped caption-top">
                         <caption>FRAME JOINT DATA</caption>
                         <thead>
@@ -92,7 +92,7 @@
                 </div>
 
                 <div class="table my-4 my-custom-scrollbar">
-                    <table class="table table-bordered table-striped caption-top">
+                    <table class="table mb-3 table-bordered table-striped caption-top">
                         <caption>FRAME MEMBER DATA</caption>
                         <thead>
                             <tr>
@@ -130,7 +130,7 @@
                 </ul> -->
 
                 {% if loads_list %}
-                <div class="table mb-1">
+                <div class="table mb-2">
                     <table class="table table-bordered table-striped caption-top">
                         <caption>LOAD CASE DATA</caption>
                         <thead>
@@ -176,4 +176,6 @@
         </div>
     </div>
 </div>
+
+<script>document.getElementById("basic_frame").onload = function() {formLoad()};</script>
 {% endblock %}

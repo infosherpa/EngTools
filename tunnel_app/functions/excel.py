@@ -314,9 +314,12 @@ def create_workbook(tunnel_frame, auth=False):
             break
         if member[2][-1]=="S":
             modifier = 1
-        vals = [member[2], f"{strength}Psi", "Rectangular", thickness, 1000, "", "", "", "", "", "", "", "", "", "", "",
-                "", "", "", "No", 1, 1, 1, modifier, modifier, modifier, 1, 1, "", ""]
-        ws10.append(vals)
+
+        if member[2] not in members_name:
+            vals = [member[2], f"{strength}Psi", "Rectangular", thickness, 1000, "", "", "", "", "", "", "", "", "", "", "",
+                    "", "", "", "No", 1, 1, 1, modifier, modifier, modifier, 1, 1, "", ""]
+            ws10.append(vals)
+            members_name.append(member[2])
 
         # Frame Section Properties routine
 
@@ -361,7 +364,7 @@ def create_workbook(tunnel_frame, auth=False):
     for grid in tunnel_frame.grid_locations_x:
         ws13.append(["GLOBAL", "X", chr(i), float(grid), "Primary", "Gray8Dark", "Yes", "End", "Yes", 1250])
         i += 1
-    ws13.append(["GLOBAL", "Y", 1, 0, "Primary", "Gray8Dark", "Yes", "End", "Yes", 1250])
+    ws13.append(["GLOBAL", "Y", 1, 0, "Primary", "Gray8Dark", "Yes", "End", "Yes", 500])
 
     i = 1
     for grid in tunnel_frame.grid_locations_z:
@@ -470,13 +473,13 @@ def create_workbook(tunnel_frame, auth=False):
 
     #####
 
-    """ws21 = wb.create_sheet(title="Joint Restraint Assignments")
+    ws21 = wb.create_sheet(title="Joint Restraint Assignments")
     ws21['A1'] = "TABLE: Joint Restraint Assignments"
     ws21.append(['Joint', 'U1', 'U2', 'U3', 'R1', 'R2', 'R3'])
     ws21.append(['Text', 'Yes/No', 'Yes/No', 'Yes/No', 'Yes/No', 'Yes/No', 'Yes/No'])
     for joint, values in tunnel_frame.joint_coordinates.items():
         if values[1] == 0:
-            ws21.append([joint, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'])"""
+            ws21.append([joint, 'Yes', 'Yes', 'Yes', 'No', 'No', 'No'])
 
     loads_list = []
     for load in loads:

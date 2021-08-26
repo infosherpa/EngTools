@@ -72,11 +72,13 @@ def get_geometry(TunnelFrame):
         'roof_slab_r_vertex_t': roof_slab_r_vertex_t,
         'roof_slab_r_vertex_b': roof_slab_r_vertex_b,
 
-        'left_haunch_bottom': left_haunch_bottom,
-        'left_haunch_top': left_haunch_top,
-        'right_haunch_bottom': right_haunch_bottom,
-        'right_hauch_top': right_hauch_top,
     }
+    if TunnelFrame.haunch_width:
+        if TunnelFrame.haunch_width > 0 :
+            vertexes['left_haunch_bottom'] = left_haunch_bottom
+            vertexes['left_haunch_top'] = left_haunch_top
+            vertexes['right_haunch_bottom'] = right_haunch_bottom
+            vertexes['right_hauch_top'] = right_hauch_top
 
     if TunnelFrame.concourse_slab_thickness:
 

@@ -26,8 +26,9 @@ urlpatterns = [
     path('project/', include('project_manager.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + \
-              static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+# + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + \
+               # static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 handler404 = 'tunnelworks.views.error_404'

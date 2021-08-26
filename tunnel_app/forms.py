@@ -59,20 +59,37 @@ class TunnelForm(forms.ModelForm):
         self.fields['concrete_strength_slabs'].label = "Concrete Strength Slabs (PSI)"
         self.fields['concrete_strength_columns'].label = "Concrete Strength Columns (PSI)"
 
+        self.fields['column_capital_roof_slab_height'].widget.attrs['readonly'] = True
+        self.fields['column_capital_roof_slab_width'].widget.attrs['readonly'] = True
+        self.fields['column_capital_height'].widget.attrs['readonly'] = True
+        self.fields['column_capital_width'].widget.attrs['readonly'] = True
+        self.fields['column_width'].widget.attrs['readonly'] = True
+
+        self.fields['concourse_haunch_depth'].widget.attrs['readonly'] = True
+        self.fields['concourse_haunch_width'].widget.attrs['readonly'] = True
+        self.fields['concourse_slab_vertical_location'].widget.attrs['readonly'] = True
+
+
         self.helper.layout = Layout(
+                Div(
+                Div(
                 Row(
                     Column(
                         Div(
-                        HTML("<p class='pt-3 px-2' style='font-family:Rockwell Italic'>1.  Input Frame Dimensions</p>"),
-                        HTML("<p class='px-2' style='font-family:Rockwell Italic'>2.  Generate Frame</p>"),
-                        HTML("<p class='px-2' style='font-family:Rockwell Italic'>3.  Download a SAP-2000 Compatible Excel file</p>"),
-                        css_class="border border-3"),
-                        css_class="col-md-5 mb-0"),
+                        HTML("<p class='pt-3 px-2'>1.  Input Frame Dimensions (* for required fields)</p>"),
+                        HTML("<p class='px-2'>2.  Generate Frame</p>"),
+                        HTML("<p class='px-2'>3.  Download a SAP-2000 Compatible Excel file</p>"),
+                        css_class="border-bottom border-top border-dark border-3"),
+                        css_class="col-md-10 mb-2"),
+                ),
+                Row(
                     Column(
                         Field('frame_description', css_class='form-control'),
-                        Field('dimension_system', css_class='form-select'),
                         css_class='form-group col-md-5 mb-0'),
-                ),
+                    Column(
+                        Field('dimension_system', css_class='form-select'),
+                        css_class='form-group col-md-5 mb-0')
+                    ),
                 Row(
                     Column(
                         Field('plane', css_class='form-select'),
@@ -117,43 +134,60 @@ class TunnelForm(forms.ModelForm):
                     css_class="form-group row mb-0"),
                 Row(
                     Column(
-                        Field('concourse_slab_thickness', css_class='no-spin form-control', min=0),
+                        Field('slab_stiffness_modifier', css_class='no-spin form-control', min=0),
+                        css_class='col-md-5 mb-0'),
+                    Column(
+                        Field('wall_stiffness_modifier', css_class='no-spin form-control', min=0),
+                        css_class='col-md-5 mb-0'),
+                    css_class="row"),
+                    id='basic_frame'),
+
+                Div(
+                Row(
+                        Div(
+                        HTML("<p class='pt-3 px-2'>Add Concourse Slab Thickness to modify Concourse Elements</p>"),
+                        HTML("<p class='px-2'>Increase Bays above 1 to modify column elements</p>"),
+                        css_class="ml-3 pl-3 border-bottom border-top border-dark border-3"),
+                        css_class="col-md-10 mb-3"),
+                Row(
+                    Column(
+                        Field('concourse_slab_thickness', css_class='no-spin form-control', min=0, oninput="concourseControl()"),
                         css_class='form-group col-md-5 mb-0'),
                     Column(
                         Field('concourse_slab_vertical_location', css_class='no-spin form-control', min=0),
-                        css_class='form-group col-md-5 mb-0'),
+                        css_class='form-group col-md-5 mb-0', css_id="chvl"),
                     css_class="form-row mb-0"),
                 Row(
                     Column(
                         Field('concourse_haunch_depth', css_class='no-spin form-control', min=0),
-                        css_class='form-group col-md-5 mb-0'),
+                        css_class='form-group col-md-5 mb-0', css_id="chdi"),
                     Column(
                         Field('concourse_haunch_width', css_class='no-spin form-control', min=0),
-                        css_class='form-group col-md-5 mb-0'),
+                        css_class='form-group col-md-5 mb-0', css_id="chwi"),
                     css_class="form-row mb-0"),
                 Row(
                     Column(
-                        Field('column_bays', css_class='no-spin form-control', min=1),
+                        Field('column_bays', css_class='no-spin form-control', min=1, oninput="columnControl()"),
                         css_class='form-group col-md-5 mb-0'),
                     Column(
                         Field('column_width', css_class='no-spin form-control', min=0),
-                        css_class='form-group col-md-5 mb-0'),
+                        css_class='form-group col-md-5 mb-0', css_id="cwi"),
                     css_class="form-row mb-0"),
                 Row(
                     Column(
                         Field('column_capital_height', css_class='no-spin form-control', min=0),
-                           css_class='form-group col-md-5 mb-0'),
+                           css_class='form-group col-md-5 mb-0', css_id="cchcs"),
                     Column(
                         Field('column_capital_width', css_class='no-spin form-control', min=0),
-                              css_class='form-group form-outline col-md-5 mb-0'),
+                              css_class='form-group form-outline col-md-5 mb-0', css_id="ccwcs"),
                     css_class='form-row mb-0'),
                 Row(
                     Column(
                         Field('column_capital_roof_slab_height', css_class='no-spin form-control', min=0),
-                        css_class='form-group form-outline col-md-5 mb-0'),
+                        css_class='form-group form-outline col-md-5 mb-0', css_id="ccrsh"),
                     Column(
                         Field('column_capital_roof_slab_width', css_class='no-spin form-control', min=0),
-                        css_class='form-group form-outline col-md-5 mb-0'),
+                        css_class='form-group form-outline col-md-5 mb-0', css_id="ccrsw"),
                     css_class="form-row mb-0"),
                 Row(
                     Column(
@@ -163,21 +197,17 @@ class TunnelForm(forms.ModelForm):
                         Field('concrete_strength_columns', css_class='no-spin form-control', min=0),
                         css_class='col-md-5 mb-0'),
                     css_class="row"),
-                Row(
-                    Column(
-                        Field('slab_stiffness_modifier', css_class='no-spin form-control', min=0),
-                        css_class='col-md-5 mb-0'),
-                    Column(
-                        Field('wall_stiffness_modifier', css_class='no-spin form-control', min=0),
-                        css_class='col-md-5 mb-0'),
-                    css_class="row"),
+                    css_id='conc_col', css_class="mt-3 pt-3", style="display: none;"),
 
 
             FormActions(
+                Button('_conc', 'Add Concourse/Columns', css_class='btn btn-outline-success', onclick='formAdv()',
+                       css_id="formcontrolbut"),
                 Submit('_generate', 'Generate', css_class='btn btn-success my-3'),
                 Submit('_excel', 'Excel', css_class='btn btn-success my-3'),
                 # Submit('_save', 'Save', css_class='btn btn-success my-3')
-            )
+            css_class="col-md-10 mt-3 border-dark border-bottom border-top border-3"),
+        css_class="mb-5"),
         )
 
 
