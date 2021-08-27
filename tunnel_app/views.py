@@ -148,6 +148,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
         'concrete_strength_columns': tunnelframe.concrete_strength_columns,
         'concrete_strength_slabs': tunnelframe.concrete_strength_slabs,
         'concrete_strength_walls': tunnelframe.concrete_strength_walls,
+        'base_restraint': tunnelframe.base_restraint,
     }
 
     form = TunnelForm(initial=form_data)

@@ -66,6 +66,7 @@ class TunnelFrame(models.Model):
     concrete_strength_columns = models.IntegerField(default=5000)
 
     frame_image = models.ImageField(null=True)
+    base_restraint = models.BooleanField(default=False)
 
     def __str__(self):
         return self.frame_description

@@ -481,9 +481,10 @@ def create_workbook(tunnel_frame, auth=False):
     ws21['A1'] = "TABLE: Joint Restraint Assignments"
     ws21.append(['Joint', 'U1', 'U2', 'U3', 'R1', 'R2', 'R3'])
     ws21.append(['Text', 'Yes/No', 'Yes/No', 'Yes/No', 'Yes/No', 'Yes/No', 'Yes/No'])
-    for joint, values in tunnel_frame.joint_coordinates.items():
-        if values[1] == 0:
-            ws21.append([joint, 'Yes', 'Yes', 'Yes', 'No', 'No', 'No'])
+    if tunnel_frame.base_restraint is True:
+        for joint, values in tunnel_frame.joint_coordinates.items():
+            if values[1] == 0:
+                ws21.append([joint, 'Yes', 'Yes', 'Yes', 'No', 'No', 'No'])
 
     loads_list = []
     for load in loads:

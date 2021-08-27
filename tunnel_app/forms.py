@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Div, MultiField, Field, Row, Column, Button, Hidden, HTML, BaseInput
-from crispy_forms.bootstrap import FormActions, AppendedText, PrependedAppendedText, PrependedText
+from crispy_forms.bootstrap import FormActions, AppendedText, PrependedAppendedText, PrependedText, InlineCheckboxes
 
 
 class TunnelInputForm(forms.ModelForm):
@@ -58,6 +58,7 @@ class TunnelForm(forms.ModelForm):
         self.fields['concrete_strength_walls'].label = "Concrete Strength Walls (PSI)"
         self.fields['concrete_strength_slabs'].label = "Concrete Strength Slabs (PSI)"
         self.fields['concrete_strength_columns'].label = "Concrete Strength Columns (PSI)"
+        self.fields['base_restraint'].label = "Frame Restrained at Base"
 
         self.fields['column_capital_roof_slab_height'].widget.attrs['readonly'] = True
         self.fields['column_capital_roof_slab_width'].widget.attrs['readonly'] = True
@@ -140,14 +141,18 @@ class TunnelForm(forms.ModelForm):
                         Field('wall_stiffness_modifier', css_class='no-spin form-control', min=0),
                         css_class='col-md-5 mb-0'),
                     css_class="row"),
+                Row(
+                    Column(
+                        Field('base_restraint'),
+                        css_class='col-md-5 my-1'),
+                    css_class="row"),
                     id='basic_frame'),
 
                 Div(
                 Row(
                         Div(
-                        HTML("<p class='mt-2 px-2'>-> Add a Concourse Slab Thickness to create a Concourse Slab for the Frame and enable the Concourse control Elements</p>"),
+                        HTML("<p class='mt-2 px-2'>-> Enter Concourse Slab Thickness to create a Concourse Slab for the Frame and enable the Concourse control Elements</p>"),
                         HTML("<p class='px-2'>-> Increase Bays above 1 to Add Columns to the Frame and enable the Column control Elements</p>"),
-                        HTML("<p class='px-2'>-> These elements are not required</p>"),
                         css_class="ml-3 pl-3 border-bottom border-top border-dark border-3"),
                         css_class="col-md-10 mb-3"),
                 Row(
@@ -222,7 +227,7 @@ class TunnelForm(forms.ModelForm):
                   'column_capital_height', 'column_capital_width', 'concourse_slab_vertical_location', 'column_width',
                   'column_capital_roof_slab_height', 'column_capital_roof_slab_width', 'column_stiffness_modifier',
                   'wall_stiffness_modifier', 'slab_stiffness_modifier', 'concrete_strength_walls', 'concrete_strength_slabs',
-                  'concrete_strength_columns']
+                  'concrete_strength_columns', 'base_restraint']
 
     def clean(self):
         """Sanity check of measurements"""

@@ -22,6 +22,7 @@ from django.conf.urls import handler404, handler500
 
 urlpatterns = [
     path('', index, name='index'),
+    path('about/', about, name='about'),
     path('tun/', include('tunnel_app.urls')),
     path('project/', include('project_manager.urls')),
     path('admin/', admin.site.urls),
