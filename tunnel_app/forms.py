@@ -95,7 +95,7 @@ class TunnelForm(forms.ModelForm):
                         Field('plane', css_class='form-select'),
                         css_class='form-group col-md-5 mb-0'),
                     Column(
-                        Field('roof_slab_thickness', css_class='no-spin form-control', min=0),
+                        Field('inverse_slab_thickness', css_class='no-spin form-control', min=0),
                         css_class="col-md-5 mb-0"),
                 ),
                 Row(
@@ -145,8 +145,9 @@ class TunnelForm(forms.ModelForm):
                 Div(
                 Row(
                         Div(
-                        HTML("<p class='pt-3 px-2'>Add Concourse Slab Thickness to modify Concourse Elements</p>"),
-                        HTML("<p class='px-2'>Increase Bays above 1 to modify column elements</p>"),
+                        HTML("<p class='mt-2 px-2'>-> Add a Concourse Slab Thickness to create a Concourse Slab for the Frame and enable the Concourse control Elements</p>"),
+                        HTML("<p class='px-2'>-> Increase Bays above 1 to Add Columns to the Frame and enable the Column control Elements</p>"),
+                        HTML("<p class='px-2'>-> These elements are not required</p>"),
                         css_class="ml-3 pl-3 border-bottom border-top border-dark border-3"),
                         css_class="col-md-10 mb-3"),
                 Row(
@@ -216,7 +217,7 @@ class TunnelForm(forms.ModelForm):
         model = TunnelFrame
         fields = ['frame_description', 'dimension_system', 'plane', 'frame_inner_height', 'frame_outer_height',
                   'frame_inner_width', 'frame_outer_width',
-                  'haunch_depth', 'haunch_width', 'roof_slab_thickness', 'concourse_slab_thickness',
+                  'haunch_depth', 'haunch_width', 'inverse_slab_thickness', 'concourse_slab_thickness',
                   'concourse_haunch_depth', 'concourse_haunch_width', 'column_bays',
                   'column_capital_height', 'column_capital_width', 'concourse_slab_vertical_location', 'column_width',
                   'column_capital_roof_slab_height', 'column_capital_roof_slab_width', 'column_stiffness_modifier',

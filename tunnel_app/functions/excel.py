@@ -403,13 +403,17 @@ def create_workbook(tunnel_frame, auth=False):
     ws16.append(
         ['Case', 'Type', 'InitialCond', 'ModalCase', 'BaseCase', 'MassSource', 'DesTypeOpt', 'DesignType', 'DesActOpt', 'DesignAct', 'AutoType', 'RunCase', 'CaseStatus', 'GUID', 'Notes'])
     ws16.append(['Text', 'Text', 'Text', 'Text', 'Text', 'Text', 'Text', 'Text', 'Text', 'Text', 'Text', 'Yes/No', 'Text', 'Text', 'Text'])
+    loads_list = []
     for load in loads:
+        if load.load_pattern_description in loads_list:
+            continue
         if load.load_pattern_description[0:2] == "LL":
             load_type = "Live"
             load_type2 = "Short-Term Composite"
         else:
             load_type = "Other"
         ws16.append([load.load_pattern_description, "NonStatic", "Zero", "", "", "", "Prog Det", load_type, "Prog Det", "", "None", "Yes", "Not Run", "", ""])
+        loads_list.append(load.load_pattern_description)
 
     ######
 
@@ -487,7 +491,6 @@ def create_workbook(tunnel_frame, auth=False):
             continue
         ws20.append([load.load_pattern_description, 'Load pattern', load.load_pattern_description, 1])
         loads_list.append(load.load_pattern_description)
-
 
     if auth is False:
         response = HttpResponse(content_type='application/ms-excel')

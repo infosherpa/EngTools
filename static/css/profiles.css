@@ -207,3 +207,49 @@ background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%) !important;
 }
 
 
+.fa {
+  padding: 10px;
+  font-size: 20px;
+  width: 34px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.fa-twitter {
+  background: #55ACEE;
+  color: white;
+}
+
+.fa-instagram {
+  background: #125688;
+  color: white;
+}
+
+.fa-facebook {
+  background: #3B5998;
+  color: white;
+}
+
+.fa-youtube {
+  background: #bb0000;
+  color: white;
+}
+
+.fa-linkedin {
+  background: #007bb5;
+  color: white;
+}
+
+#rotating-item-wrapper {
+    position: relative;
+    width: 750px;
+    height: 550px;
+}
+.rotating-item {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

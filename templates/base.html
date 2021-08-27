@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/profiles.css' %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>{% block title %}EngTools{% endblock %}</title>
 </head>
 <body class="d-flex flex-column min-vh-100 border-green" style="border-left: 10px solid #198754;">
@@ -82,9 +83,16 @@
     <div class="container container--flex container--flex--wrap--mobile py-2">
         <div class="row d-flex">
             <div class="col">
-                <ul class="list-group list-group-flush bg-transparent">
+                <ul class="list-group list-group-horizontal bg-transparent">
                     <li class="list-group-item bg-transparent">
-                        <a class="text-decoration-none text-white" href="#">About EngTools</a>
+                        <a class="text-decoration-none text-white align-middle" href="#">About EngTools</a>
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <a href="https://twitter.com/ibigroup" target="_blank" class="fa fa-twitter justfy-content-center"></a>
+                        <a href="https://www.facebook.com/ibigroup" target="_blank" class="fa fa-facebook justfy-content-center"></a>
+                        <a href="https://www.youtube.com/channel/UCHeNBald7aLLE1aTz0LSf6w" target="_blank" class="fa fa-youtube justfy-content-center"></a>
+                        <a href="https://www.instagram.com/ibi_group/" target="_blank" class="fa fa-instagram justfy-content-center"></a>
+                        <a href="https://ca.linkedin.com/company/ibi-group_2" target="_blank" class="fa fa-linkedin justfy-content-center"></a>
                     </li>
                 </ul>
             </div>

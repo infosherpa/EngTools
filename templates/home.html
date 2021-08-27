@@ -5,10 +5,20 @@
 
 {% block content %}
 
-
-<div class="d-flex justify-content-center mt-5">
-    <h3>Engtools provides utilities aimed at speeding up the design process</h3>
+<div class="row mx-auto mt-4 mb-3 text-center center-block">
+    <div id="rotating-item-wrapper">
+        <img class="rotating-item" src="{% static 'images/tunnel_hpg.jpeg' %}" alt="photo of building across from our office" width="750" height="550" />
+        <img class="rotating-item" src="{% static 'images/tor_hpg.jpeg' %}" alt="building entrance with neon backlit walls" width="750" height="550" />
+        <img class="rotating-item" src="{% static 'images/hrg_hpg.jpg' %}" alt="building lobby window reflections" width="750" height="550" />
+        <img class="rotating-item" src="{% static 'images/silo_hpg.jpeg' %}" alt="reflection on building windows" width="750" height="550" />
+    </div>
 </div>
 
+<div class="d-flex justify-content-center mb-2 border-top border-2">
+    <h5>EngTools provides utilities aimed at speeding up the design process</h5>
+</div>
+<div class="d-flex justify-content-center mb-2">
+    <h5>Spend less time entering numbers and more time creating value for clients</h5>
+</div>
 
 {% endblock %}

@@ -65,9 +65,9 @@ def tunnel_app_home2(request):
                 tunnelframe = form.save(commit=False)
                 tunnelframe.wall_slab_thickness = (form.cleaned_data['frame_outer_width'] -
                                                    form.cleaned_data['frame_inner_width']) / 2
-                tunnelframe.inverse_slab_thickness = (
+                tunnelframe.roof_slab_thickness = (
                     form.cleaned_data['frame_outer_height'] - form.cleaned_data['frame_inner_height']
-                    - form.cleaned_data['roof_slab_thickness']
+                    - form.cleaned_data['inverse_slab_thickness']
                 )
                 token_url = str(secrets.token_hex(6))[:8]
                 tunnelframe.hash = token_url
@@ -131,7 +131,7 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
         'frame_outer_width': tunnelframe.frame_outer_width,
         'haunch_depth': tunnelframe.haunch_depth,
         'haunch_width': tunnelframe.haunch_width,
-        'roof_slab_thickness': tunnelframe.roof_slab_thickness,
+        'inverse_slab_thickness': tunnelframe.inverse_slab_thickness,
         'concourse_slab_thickness':tunnelframe.concourse_slab_thickness,
         'concourse_slab_vertical_location':tunnelframe.concourse_slab_vertical_location,
         'column_capital_height':tunnelframe.column_capital_height,
@@ -213,9 +213,9 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
             if form.is_valid():
                 tunnelframe.wall_slab_thickness = (form.cleaned_data['frame_outer_width'] -
                                                    form.cleaned_data['frame_inner_width']) / 2
-                tunnelframe.inverse_slab_thickness = (
+                tunnelframe.roof_slab_thickness = (
                         form.cleaned_data['frame_outer_height'] - form.cleaned_data['frame_inner_height']
-                        - form.cleaned_data['roof_slab_thickness']
+                        - form.cleaned_data['inverse_slab_thickness']
                 )
                 form.save()
                 print('redirect')
@@ -329,9 +329,9 @@ def ajax_post_view(request):
                 tunnelframe = tunnel_geo_form.save(commit=False)
                 tunnelframe.wall_slab_thickness = (tunnel_geo_form.cleaned_data['frame_outer_width'] -
                                                    tunnel_geo_form.cleaned_data['frame_inner_width']) / 2
-                tunnelframe.inverse_slab_thickness = (
+                tunnelframe.roof_slab_thickness = (
                         tunnel_geo_form.cleaned_data['frame_outer_height'] - tunnel_geo_form.cleaned_data['frame_inner_height']
-                        - tunnel_geo_form.cleaned_data['roof_slab_thickness']
+                        - tunnel_geo_form.cleaned_data['inverse_slab_thickness']
                 )
                 token_url = str(secrets.token_hex(6))[:8]
                 tunnelframe.hash = token_url

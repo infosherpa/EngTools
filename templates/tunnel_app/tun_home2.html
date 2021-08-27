@@ -160,7 +160,7 @@
                                         @ {{ load.force_end_depth }} mm depth
                                     {% endif %}
                                 </td>
-                                <td><button type="submit" class="btn bg-transparent py-0 px-0" value="_del_load" onclick="location.href='{% url 'tunnel_app:delete_load' tunnelframe_hash=tunnelframe.hash load_num=load.load_id %}'">Delete Load</button></td>
+                                <td><button type="submit" class="btn bg-transparent py-0 px-0" value="_del_load" onclick="location.href='{% url 'tunnel_app:delete_load' tunnelframe_hash=tunnelframe.hash load_num=load.load_id %}'"><b>Delete Load</b></button></td>
                             </tr>
 
                             {% endfor %}
