@@ -68,6 +68,9 @@ class TunnelFrame(models.Model):
     frame_image = models.ImageField(null=True)
     base_restraint = models.BooleanField(default=False)
 
+    inverse_slab_stiffness = models.IntegerField(default=55)
+    wall_slab_stiffness = models.IntegerField(default=20)
+
     def __str__(self):
         return self.frame_description
 

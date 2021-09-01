@@ -23,7 +23,7 @@ def create_workbook(tunnel_frame, auth=False):
     degrees_freedom_headers = [
         ["UX", "UY", "UZ", "RX", "RY", "RZ"],
         ["Yes/No", "Yes/No", "Yes/No", "Yes/No", "Yes/No", "Yes/No"],
-        ["Yes", "Yes", "Yes", "Yes", "Yes", "Yes"],
+        ["Yes", "No", "Yes", "No", "Yes", "No"],
     ]
     for row in degrees_freedom_headers:
         ws1.append(row)
@@ -44,14 +44,19 @@ def create_workbook(tunnel_frame, auth=False):
     #### Case 1 - Load Assignments
     ####### Static Load Case
 
-    """ws3 = wb.create_sheet(title="Case - Static 1 - Load Assigns")
+    ws3 = wb.create_sheet(title="Case - Static 1 - Load Assigns")
     ws3['A1'] = "Table: Case - Static 1 - Load Assignments"
     ws3.append(['Case', 'LoadType', 'LoadName', 'LoadSF'])
     ws3.append(['Text', 'Text', 'Text', 'Unitless'])
 
-    
+    load_list = []
     for load in loads:
-        ws3.append([load.load_pattern_description, 'Load pattern', load.load_pattern_description, 1])"""
+        ws3.append(["SLS_1", 'Load pattern', load.load_pattern_description, 1])
+        if load in load_list:
+            continue
+        ws3.append([load.load_pattern_description, 'Load pattern', load.load_pattern_description, 1])
+        load_list.append(load)
+    ws3.append(["SLS_1", 'Load pattern', "DEAD", 1])
 
     ##
     # WS4 Frame Connectivity (Members)
@@ -331,7 +336,7 @@ def create_workbook(tunnel_frame, auth=False):
     ws12 = wb.create_sheet(title="Frame Spring Assignments")
     ws12['A1'] = "Table: Frame Spring Assignments"
     ws12.append(['Frame', 'Type', 'Stiffness', 'SimpleType', 'Dir1Type', 'CoordSys', 'VecX', 'VecY', 'VecZ'])
-    ws12.append(['Text', 'Text', 'kN/m/m', 'Text', 'Text', 'Text', 'Unitless', 'Unitless', 'Unitless'])
+    ws12.append(['Text', 'Text', 'N/mm/mm', 'Text', 'Text', 'Text', 'Unitless', 'Unitless', 'Unitless'])
     vecy = 0
     for frm_num, member in tunnel_frame.connectivity_frame.items():
         if member[2][0:2]=="RS":
@@ -339,11 +344,11 @@ def create_workbook(tunnel_frame, auth=False):
         elif member[2][0:2]=="CS":
             continue
         elif member[2][0:2]=="IS":
-            stiffness = 55000
+            stiffness = tunnel_frame.inverse_slab_thickness
             vecx = 0
             vecz = 1
         elif member[2][0:2]=="WS":
-            stiffness = 20000
+            stiffness = tunnel_frame.wall_slab_thickness
             vecz = 0
             if tunnel_frame.joint_coordinates[member[0]][0] < tunnel_frame.frame_inner_width:
                 vecx = 1
@@ -414,6 +419,8 @@ def create_workbook(tunnel_frame, auth=False):
             load_type = "Other"
         ws16.append([load.load_pattern_description, "NonStatic", "Zero", "", "", "", "Prog Det", load_type, "Prog Det", "", "None", "Yes", "Not Run", "", ""])
         loads_list.append(load.load_pattern_description)
+    sls_case = ["SLS_1", "NonStatic", "Zero", "", "", "", "Prog Det", "Other", "Prog Det", "", "Non-Composite", "Yes", "Not Run", "", ""]
+    ws16.append(sls_case)
 
     ######
 

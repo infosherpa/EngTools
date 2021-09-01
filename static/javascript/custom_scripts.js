@@ -390,3 +390,21 @@ $(window).on("load", function() { //start after HTML, images have loaded
     InfiniteRotator.init();
 
 });
+
+
+function columnDisplay() {
+    if (document.getElementById("columnCheck").checked == true ) {
+      document.getElementById("column_control").style.display = "block";
+    } else {
+      document.getElementById("column_control").style.display = "none";
+    }
+}
+
+
+function concourseDisplay() {
+    if (document.getElementById("concourseCheck").checked == true ) {
+      document.getElementById("concourse_control").style.display = "block";
+    } else {
+      document.getElementById("concourse_control").style.display = "none";
+    }
+}

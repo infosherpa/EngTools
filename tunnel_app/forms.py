@@ -60,6 +60,9 @@ class TunnelForm(forms.ModelForm):
         self.fields['concrete_strength_columns'].label = "Concrete Strength Columns (PSI)"
         self.fields['base_restraint'].label = "Frame Restrained at Base"
 
+        self.fields['inverse_slab_stiffness'].label = "Slab Spring Stiffness (N/mm)"
+        self.fields['wall_slab_stiffness'].label = "Wall Spring Stiffness (N/mm)"
+
         self.fields['column_capital_roof_slab_height'].widget.attrs['readonly'] = True
         self.fields['column_capital_roof_slab_width'].widget.attrs['readonly'] = True
         self.fields['column_capital_height'].widget.attrs['readonly'] = True
@@ -70,7 +73,6 @@ class TunnelForm(forms.ModelForm):
         self.fields['concourse_haunch_width'].widget.attrs['readonly'] = True
         self.fields['concourse_slab_vertical_location'].widget.attrs['readonly'] = True
 
-
         self.helper.layout = Layout(
                 Div(
                 Div(
@@ -80,7 +82,7 @@ class TunnelForm(forms.ModelForm):
                         HTML("<p class='pt-3 px-2'>1.  Input Frame Dimensions (* for required fields)</p>"),
                         HTML("<p class='px-2'>2.  Generate Frame</p>"),
                         HTML("<p class='px-2'>3.  Download a SAP-2000 Compatible Excel file</p>"),
-                        css_class="border-bottom border-top border-dark border-3"),
+                        css_class="border-bottom border-dark border-3"),
                         css_class="col-md-10 mb-2"),
                 ),
                 Row(
@@ -143,18 +145,26 @@ class TunnelForm(forms.ModelForm):
                     css_class="row"),
                 Row(
                     Column(
+                        Field('inverse_slab_stiffness', css_class='no-spin form-control', min=0),
+                        css_class='col-md-5 mb-0'),
+                    Column(
+                        Field('wall_slab_stiffness', css_class='no-spin form-control', min=0),
+                        css_class='col-md-5 mb-0'),
+                    css_class="row"),
+                Row(
+                    Column(
                         Field('base_restraint'),
                         css_class='col-md-5 my-1'),
                     css_class="row"),
                     id='basic_frame'),
 
                 Div(
-                Row(
-                        Div(
-                        HTML("<p class='mt-2 px-2'>-> Enter Concourse Slab Thickness to create a Concourse Slab for the Frame and enable the Concourse control Elements</p>"),
-                        HTML("<p class='px-2'>-> Increase Bays above 1 to Add Columns to the Frame and enable the Column control Elements</p>"),
-                        css_class="ml-3 pl-3 border-bottom border-top border-dark border-3"),
-                        css_class="col-md-10 mb-3"),
+                    HTML("<input type='checkbox' class='custom-control-input my-1' id='concourseCheck'>"
+                        '<label class="custom-control-label" for="concourseCheck"> Add a Concourse Level to the Frame</label>'),
+                        css_class="custom-control custom-checkbox", onclick="concourseDisplay()"
+                ),
+
+                Div(
                 Row(
                     Column(
                         Field('concourse_slab_thickness', css_class='no-spin form-control', min=0, oninput="concourseControl()"),
@@ -171,6 +181,14 @@ class TunnelForm(forms.ModelForm):
                         Field('concourse_haunch_width', css_class='no-spin form-control', min=0),
                         css_class='form-group col-md-5 mb-0', css_id="chwi"),
                     css_class="form-row mb-0"),
+                    css_id='concourse_control', css_class="mb-1 mt-1", style="display: none;"),
+
+                Div(
+                    HTML("<input type='checkbox' class='custom-control-input' id='columnCheck'>"
+                         '<label class="custom-control-label" for="columncheck"> Add Columns to the Inner Frame Area</label>'),
+                    css_class="custom-control custom-checkbox my-1", onclick="columnDisplay()"
+                ),
+                Div(
                 Row(
                     Column(
                         Field('column_bays', css_class='no-spin form-control', min=1, oninput="columnControl()"),
@@ -203,16 +221,14 @@ class TunnelForm(forms.ModelForm):
                         Field('concrete_strength_columns', css_class='no-spin form-control', min=0),
                         css_class='col-md-5 mb-0'),
                     css_class="row"),
-                    css_id='conc_col', css_class="mt-3 pt-3", style="display: none;"),
+                    css_id='column_control', css_class="mt-1", style="display: none;"),
 
 
             FormActions(
-                Button('_conc', 'Add Concourse/Columns', css_class='btn btn-outline-success', onclick='formAdv()',
-                       css_id="formcontrolbut"),
                 Submit('_generate', 'Generate', css_class='btn btn-success my-3'),
                 Submit('_excel', 'Excel', css_class='btn btn-success my-3'),
                 # Submit('_save', 'Save', css_class='btn btn-success my-3')
-            css_class="col-md-10 mt-3 border-dark border-bottom border-top border-3"),
+            css_class="col-md-10 mt-2 border-dark border-bottom border-3"),
         css_class="mb-5"),
         )
 
@@ -227,7 +243,7 @@ class TunnelForm(forms.ModelForm):
                   'column_capital_height', 'column_capital_width', 'concourse_slab_vertical_location', 'column_width',
                   'column_capital_roof_slab_height', 'column_capital_roof_slab_width', 'column_stiffness_modifier',
                   'wall_stiffness_modifier', 'slab_stiffness_modifier', 'concrete_strength_walls', 'concrete_strength_slabs',
-                  'concrete_strength_columns', 'base_restraint']
+                  'concrete_strength_columns', 'base_restraint', 'inverse_slab_stiffness', 'wall_slab_stiffness']
 
     def clean(self):
         """Sanity check of measurements"""
@@ -258,6 +274,8 @@ class TunnelForm(forms.ModelForm):
         if concourse_slab_thickness:
             if concourse_haunch_depth is None or concourse_haunch_width is None:
                 raise ValidationError(_('Input 0 if no Haunch on Concourse level'), code='invalid')
+            if not concourse_slab_vertical_location:
+                raise ValidationError(_('Add Concourse Vertical Slab Location'), code='invalid')
         if column_bays >1:
             print(column_bays)
             if column_width is None:
@@ -277,6 +295,7 @@ class TunnelForm(forms.ModelForm):
         if column_width:
             if column_bays <= 1:
                 raise ValidationError(_('Invalid value: Column Width Defined but no columns - Add Column Divided Bay'), code='invalid')
+
 
 
 class LoadDefinitionForm(forms.ModelForm):
