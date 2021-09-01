@@ -344,11 +344,11 @@ def create_workbook(tunnel_frame, auth=False):
         elif member[2][0:2]=="CS":
             continue
         elif member[2][0:2]=="IS":
-            stiffness = tunnel_frame.inverse_slab_thickness
+            stiffness = tunnel_frame.inverse_slab_stiffness
             vecx = 0
             vecz = 1
         elif member[2][0:2]=="WS":
-            stiffness = tunnel_frame.wall_slab_thickness
+            stiffness = tunnel_frame.wall_slab_stiffness
             vecz = 0
             if tunnel_frame.joint_coordinates[member[0]][0] < tunnel_frame.frame_inner_width:
                 vecx = 1
