@@ -4,7 +4,7 @@ import re
 import shutil
 
 temp = open('temp', 'w')
-with open('tunnelworks/settings.py', 'r+') as f:
+with open('../engtools_root/settings.py', 'r+') as f:
 
   for line in f:
     if line.startswith('import'):
@@ -36,10 +36,10 @@ temp.write(django_heroku)
 temp.write('\n')
 
 temp.close()
-shutil.move('temp', 'tunnelworks/settings.py')
+shutil.move('temp', '../engtools_root/settings.py')
 
 
-with open('requirements.txt', 'a') as f:
+with open('../requirements.txt', 'a') as f:
   f.write('psycopg2-binary==2.9.1'+'\n')
   f.write('gunicorn==20.1.0'+'\n')
   f.write('dj-database-url==0.5.0'+'\n')

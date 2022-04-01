@@ -6,8 +6,11 @@ from decimal import *
 
 
 class TunnelFrame(models.Model):
-    """All dimension inputs in mm
-    Frames are drawn on an X-Z axis (y=0)
+    """
+    The Core Tunnel-Frame object, consisting of the member dimensions, strength co-efficients and stiffness modifiers
+
+    All dimension inputs in mm Frames are by default drawn on an X-Z axis (y=0),
+    in relation to the SAP X-Y-Z 3D modelling system
     """
     dimension_system_choices = (
         ("Metric_Standard", "N mm C"),
@@ -74,20 +77,26 @@ class TunnelFrame(models.Model):
     def __str__(self):
         return self.frame_description
 
+    def get_absolute_url(self):
+        pass
+
     def get_column_spacing(self, column_center_location):
 
         self.custom_column_spacing = None
 
     def concourse_default_height(self):
+        """Returns the center value for the concourse position in a symmetrical frame"""
         if self.concourse_slab_thickness:
             height = self.frame_outer_height/Decimal(2)
             return height
 
     def grid_lines(self):
-        """Grid Lines for the SAP2000 model occur on each plane where a key vertex exists"""
+        """Grid Lines for the SAP2000 model occur on each plane where a key vertex exists
+        This function calls a geometry function to assign the SAP grid lines to model objects"""
         self.grid_locations_x, self.grid_locations_z = get_grid_lines(self)
 
     def get_frame_geometry(self):
+        """Defines the Object Members between adjacent Vertexes depending on Frame Geometry"""
         geometry_data = get_geometry(self)
         vertexes = geometry_data['vertexes']
 
@@ -136,6 +145,8 @@ class TunnelFrame(models.Model):
 
 
 class LoadDefinition(models.Model):
+    """Load Definition - Load Surface and Load Type
+    Variable load with depth for Soil Loadings"""
     loading = [
         ("LL_RS", "Live Load Roof Slab"),
         ("LL_CS", "Live Load Concourse Slab"),
@@ -165,8 +176,8 @@ class LoadDefinition(models.Model):
     force_start_depth = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     force_end_depth = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
-    if load_pattern_description == "LL_RS":
-        pass
+    def str(self):
+        return self.loading
 
 
 class FrameMember(models.Model):
@@ -186,6 +197,7 @@ class FrameMember(models.Model):
 
 
 class FrameJoint(models.Model):
+    """Frame Joint Object"""
     parent_frame = models.ForeignKey(TunnelFrame, on_delete=models.CASCADE)
     joint_id = models.IntegerField(primary_key=True)
     x_coordinate = models.FloatField(max_length=5)
@@ -194,6 +206,7 @@ class FrameJoint(models.Model):
 
 
 class Material(models.Model):
+    """Material Class with material characteristics"""
     youngs_modulus = models.DecimalField(max_digits=10, decimal_places=4)
     compressive_strength = models.DecimalField(max_digits=10, decimal_places=4)
 

@@ -1,6 +1,8 @@
 from django.contrib.auth.forms import AuthenticationForm
 
 
+# Consider HTMX-approach for django-login-logout logic.
+
 class LogoutForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

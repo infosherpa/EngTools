@@ -24,7 +24,6 @@ urlpatterns = [
     path('', index, name='index'),
     path('about/', about, name='about'),
     path('tun/', include('tunnel_app.urls')),
-    path('project/', include('project_manager.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
 ]
@@ -32,5 +31,5 @@ urlpatterns = [
                # static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-handler404 = 'tunnelworks.views.error_404'
-handler500 = 'tunnelworks.views.error_500'
+handler404 = 'engtools_root.views.error_404'
+handler500 = 'engtools_root.views.error_500'
