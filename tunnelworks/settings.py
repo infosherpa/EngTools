@@ -14,7 +14,19 @@ from pathlib import Path
 import os
 import django_heroku
 import dj_database_url
+import django_heroku
+import django_heroku
+import dj_database_url
+import dj_database_url
+import django_heroku
+import dj_database_url
 import sys
+import django_heroku
+import dj_database_url
+import django_heroku
+import django_heroku
+import dj_database_url
+import dj_database_url
 import django_heroku
 import dj_database_url
 
@@ -185,6 +197,11 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 WHITENOISE_USE_FINDERS = True
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+
+django_heroku.settings(locals(), logging=False)
+
 
 DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
