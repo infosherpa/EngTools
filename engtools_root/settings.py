@@ -31,7 +31,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 """Secret Key in GitHub Secrets"""
-SECRET_KEY = 'hrhgnbj3h432h4j32hj32iklm24hbj23i4lk23m4234'
+SECRET_KEY = 'django-insecure-development-key'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'tunnel_app.apps.TunnelAppConfig',
     'crispy_forms',
     'accounts.apps.AccountsConfig',
-    'django_extensions',
 ]
 
 MIDDLEWARE = [
