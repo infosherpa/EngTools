@@ -24,6 +24,8 @@ class TunnelFrame(models.Model):
         (2, "Column Width")
     ]
 
+    frame_description = models.CharField(max_length=250)
+
     dimension_system = models.CharField(max_length=15, choices=dimension_system_choices, default='Metric_Standard')
     plane = models.CharField(max_length=2, choices=plane_choice, default='xz')
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
@@ -40,7 +42,6 @@ class TunnelFrame(models.Model):
     cracking_mod_compressive = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     cracking_mod_shear = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     cracking_mod_bending = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    frame_description = models.CharField(max_length=250)
     concourse_slab_thickness = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     concourse_haunch_depth = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     concourse_haunch_width = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -73,6 +74,9 @@ class TunnelFrame(models.Model):
 
     inverse_slab_stiffness = models.IntegerField(default=55)
     wall_slab_stiffness = models.IntegerField(default=20)
+
+    class Meta:
+        pass
 
     def __str__(self):
         return self.frame_description

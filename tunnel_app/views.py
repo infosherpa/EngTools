@@ -13,6 +13,7 @@ import cairo
 from .forms import TunnelInputForm, TunnelForm, LoadDefinitionForm, TunnelFormGeometry, TunnelFormConcourseColumns, \
     TunnelFrameModifiers
 from .models import TunnelFrame, LoadDefinition
+from django.contrib.auth.models import User
 from django.views.generic.list import ListView
 from .functions.geometry import get_geometry
 from .functions.excel import create_workbook
@@ -22,6 +23,8 @@ import os
 from django.conf import settings
 import secrets
 from PIL import Image
+from django.contrib.auth.decorators import login_required
+
 
 
 class UsersFramesListView(ListView):
@@ -48,7 +51,7 @@ def download_file(request):
         return response
     raise Http404
 
-
+@login_required
 def tunnel_app_home2(request):
     """Homepage for 2D Tunnel App & Tunnel Frame Information Form"""
 
@@ -72,7 +75,9 @@ def tunnel_app_home2(request):
                 token_url = str(secrets.token_hex(6))[:8]
                 tunnelframe.hash = token_url
                 if request.user.is_authenticated:
-                    tunnelframe.creator = request.user.id
+                    logged_in_user = User.objects.get(username=request.user.username)
+                    tunnelframe.creator = logged_in_user
+                    tunnelframe.save()
 
                 if '_generate' in request.POST:
                     tunnelframe.save()
@@ -109,7 +114,8 @@ def tunnel_app_home2(request):
 
 @login_required()
 def save_tunnelframe(request, tunnelframe):
-    tunnelframe.creator = request.user
+    user = User.objects.get(request.user)
+    tunnelframe.creator = user
     tunnelframe.save()
 
     # After saving the tunnelframe object we must save all associated defined loads for
@@ -291,6 +297,11 @@ def auth_tunnel_frame_success(request, tunnelframe_hash):
 def tunnel_delete_load(request, tunnelframe_hash, load_num):
     LoadDefinition.objects.filter(load_id=load_num).delete()
     return HttpResponseRedirect(reverse('tunnel_app:auth_results', args=(tunnelframe_hash,)))
+
+
+def delete_frame(request, tunnelframe_hash):
+    TunnelFrame.objects.filter(hash=tunnelframe_hash).delete()
+    return HttpResponseRedirect(reverse('accounts:profile'))
 
 
 def get_form_ajax(request, tunnelframe_hash, form_num):

@@ -12,6 +12,7 @@ urlpatterns = [
     path('java/api/form/post/', views.ajax_post_view, name="ajax"),
     path('<slug:tunnelframe_hash>/', views.auth_tunnel_frame_success, name='auth_results'),
     path('<slug:tunnelframe_hash>/<int:load_num>', views.tunnel_delete_load, name='delete_load'),
+    path('del/<slug:tunnelframe_hash>', views.delete_frame, name='delete_frame'),
 
 ]
 

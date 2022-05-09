@@ -3,15 +3,18 @@
 {% block content %}
 
 <div class="container container--flex container--flex--wrap--mobile pt-5">
-    <div class="d-flex justify-content-center">
+    <div class="d-flex">
         <div class="row row-cols-1">
             <div class="col">
-                <h1>{{user.username}}</h1>
-            </div>
-            <div class="col">
-                {% for frame in latest_frames %}
-                    <h1>{{ frame.frame_description }} --  {{ frame.frame_outer_height }}</h1>
-                {% endfor %}
+                <h4>Your Frames</h4>
+                    <ul>
+                        {% for frame in Frames %}
+                        <li>
+                            <a class="" href="/tun/{{frame.hash}}">{{ frame.frame_description }}</a> -----------------
+                            <button type="submit" class="btn bg-transparent py-0 px-0" value="_del_frame" onclick="location.href='{% url 'tunnel_app:delete_frame' tunnelframe_hash=frame.hash %}'"><b>Delete Frame</b></button>
+                        </li>
+                        {% endfor %}
+                    </ul>
             </div>
         </div>
     </div>

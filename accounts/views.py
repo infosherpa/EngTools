@@ -38,6 +38,6 @@ class ProfileView(TemplateView):
     def get_context_data(self, **kwargs):
         user = self.request.user
         context = super().get_context_data(**kwargs)
-        context['latest_frames'] = TunnelFrame.objects.filter(creator=user)[:5]
+        context['Frames'] = TunnelFrame.objects.filter(creator=user)
         print(context)
         return context
