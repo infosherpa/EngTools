@@ -19,7 +19,6 @@ from django.conf.urls.static import static
 from django.conf import settings
 from .views import *
 from django.conf.urls import handler404, handler500
-from organizations.backends import invitation_backend
 
 urlpatterns = [
     path('', index, name='index'),
